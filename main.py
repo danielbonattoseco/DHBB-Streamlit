@@ -34,9 +34,6 @@ st.markdown("""
 
 
 #%% FUNÇÕES 
-def create_anchor(anchor_id): #ÂNCORAS PARA O MENU LATERAL
-    st.markdown(f'<a id="{anchor_id}"></a>', unsafe_allow_html=True)
-
 def get_municipios(sigla_UF, *args):
     """Utiliza a API do IBGE para retornar a lista de municípios no campo correspondente
     do módulo a partir do estado selecionado na UI."""
@@ -92,8 +89,6 @@ with open("dicts/estados_br.json") as f:
 
 # IMAGEM CPDOC
 st.image('.streamlit/thumbnails/cpdoc-logo.png', caption=None, width=200, clamp=False, channels="RGB", output_format="auto")
-
-create_anchor("parte1") #ANCORA MENU LATERAL
 
 # TITULO
 st.subheader("Gerador de Verbetes 0.0.2")
@@ -227,7 +222,6 @@ with tab_preenchimento:
             )
 
 #%% Parentela Política
-    create_anchor("parte2") #ANCORA MENU LATERAL
 
     with st.expander("**Parentela Política**"):                
 
