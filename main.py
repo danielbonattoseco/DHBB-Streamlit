@@ -204,7 +204,7 @@ with tab_preenchimento:
         if st.session_state.causa_morte_conhecida:
             st.text_input(
                 "Causa da morte",
-                help="Causa da morte conhecida. Exemplo: Causa natural, suicídio... (Esta informação não integra o corpo do verbete, sendo armazenada apenas como um metadado)",
+                help="Causa da morte conhecida. Exemplo: Causa natural, suicídio...  \n(Esta informação não integra o corpo do verbete, sendo armazenada apenas como um metadado)",
                 key="causa_morte"
             )
 
