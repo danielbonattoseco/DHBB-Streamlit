@@ -221,7 +221,6 @@ with tab_preenchimento:
                 key="causa_morte"
             )
 
-    st.session_state['data_falecimento'] = None
 #%% Parentela Política
 
     with st.expander("**Parentela Política**"):                
@@ -357,6 +356,8 @@ if paragrafo_introducao:
 
 if 'mun_falecimento' not in st.session_state:
     st.session_state['mun_falecimento'] = ''
+if "data_falecimento" not in st.session_state:
+    st.session_state['data_falecimento'] = ''
 if st.session_state['data_falecimento'] or st.session_state['mun_falecimento']:            
     paragrafo_falecimento = " Faleceu em" \
     + (' %s de'%(st.session_state['data_falecimento'].day)) \
