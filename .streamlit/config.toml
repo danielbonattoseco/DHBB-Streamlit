@@ -5,8 +5,5 @@ secondaryBackgroundColor = "#e6f2ff"
 textColor = "#262730"
 font = "sans serif"
 
-[layout]
-wide = true
-
 [server]
 port = 8501

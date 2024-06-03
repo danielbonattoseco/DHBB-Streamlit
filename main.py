@@ -229,7 +229,7 @@ with tab_preenchimento:
 #%% Parentela Política
     with st.expander("**Parentela Política**"):
 
-        create_anchor("parte2") #ANCORA MENU LATERAL
+        # create_anchor("parte2") #ANCORA MENU LATERAL
                 
 
         # Inicializando a lista de subconteiners na primeira execução
@@ -258,43 +258,43 @@ with tab_preenchimento:
 
 #%% Formação Acadêmica  
     with st.expander("**Formação Acadêmica**"):
-        st.write("Conteúdo de Dados do Verbete")
+        st.write("Em breve! :eyes:")
    
 #%% Trajetória Política
     with st.expander("**Trajetória Política**"):
-        st.write("Conteúdo de Identificação Pessoal")
+        st.write("Em breve! :eyes:")
     
 #%% Atuação Legislativa
     with st.expander("**Atuação Legislativa**"):
-        st.write("Conteúdo de Parentela Política")    
+        st.write("Em breve! :eyes:")
         
 #%% Trajetória na Burocracia Estatal
     with st.expander("**Trajetória na Burocracia Estatal**"):
-        st.write("Conteúdo de Dados do Verbete")
+        st.write("Em breve! :eyes:")
     
 #%% Atuação na Imprensa
     with st.expander("**Atuação na Imprensa**"):
-        st.write("Conteúdo de Identificação Pessoal")
+        st.write("Em breve! :eyes:")
     
 #%% Obras publicadas pelo verbetado
     with st.expander("**Obras publicadas pelo verbetado**"):
-        st.write("Conteúdo de Parentela Política")    
+        st.write("Em breve! :eyes:")
        
 #%% Obras publicadas sobre o verbetado
     with st.expander("**Obras publicadas sobre o verbetado**"):
-        st.write("Conteúdo de Dados do Verbete")
+        st.write("Em breve! :eyes:")
     
 #%% Processos Criminais Concluídos e Condenações
     with st.expander("**Processos Criminais Concluídos e Condenações**"):
-        st.write("Conteúdo de Identificação Pessoal")
+        st.write("Em breve! :eyes:")
     
 #%% Cônjuges
     with st.expander("**Cônjuges**"):
-        st.write("Conteúdo de Parentela Política")    
+        st.write("Em breve! :eyes:")
         
 #%% Fontes
     with st.expander("**Fontes**"):
-        st.write("Conteúdo de Parentela Política")    
+        st.write("Em breve! :eyes:")
         
 #%% TEXTO VERBETE
 
