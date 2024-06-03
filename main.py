@@ -4,8 +4,11 @@ import json
 import os
 from streamlit_extras.stylable_container import stylable_container
 import requests
+import locale
 
 ### CONFIGURAÇÕES DE LAYOUT ###
+
+locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 
 current_file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(current_file_path)
@@ -28,6 +31,7 @@ st.markdown("""
 }
         </style>
         """, unsafe_allow_html=True)
+
 
 #%% FUNÇÕES 
 def create_anchor(anchor_id): #ÂNCORAS PARA O MENU LATERAL
@@ -67,12 +71,22 @@ def delete_parentela_politica(index):
     if 'parentelas_politicas' in st.session_state and 0 <= index < len(st.session_state.parentelas_politicas):
         st.session_state.parentelas_politicas.pop(index)
 
+def validate_dates():
+    if "data_nascimento" not in st.session_state: 
+        st.session_state['data_nascimento'] = None
+    if "data_falecimento" not in st.session_state: 
+        st.session_state['data_falecimento'] = None
+    if isinstance(st.session_state.data_nascimento, datetime.date) and isinstance(st.session_state.data_falecimento, datetime.date):
+        if st.session_state.data_nascimento >= st.session_state.data_falecimento:
+            st.error("A data de falecimento não pode ser menor que a data de nascimento.")
+            st.session_state['data_falecimento'] = None
+        
 #%% CARREGAMENTO DE DADOS
 
 with open("dicts/estados_br.json") as f:
     estados_br = json.load(f)
 
-
+# siglas_estados = {v: k for k, v in estados_br.items()}
 
 #%% CONSTRUÇÃO 
 
@@ -130,9 +144,11 @@ with tab_preenchimento:
             with col3:
                 st.date_input("Data de nascimento", 
                                 format="DD-MM-YYYY", 
+                                value=None,
                                 max_value=datetime.date.today(),
                                 min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
                                 help="Data de nascimento do verbetado.",
+                                on_change=validate_dates,
                                 key="data_nascimento")                
             with col4:
                 st.selectbox("UF de nascimento", 
@@ -167,9 +183,11 @@ with tab_preenchimento:
                 with col4:
                     st.date_input("Data de falecimento", 
                                     format="DD-MM-YYYY", 
+                                    value=None,
                                     max_value=datetime.date.today(),
                                     min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
                                     help="Data de falecimento do verbetado.",
+                                    on_change=validate_dates,
                                     key="data_falecimento")
                     st.checkbox("Causa da morte conhecida?", 
                                     help="Marque esta opção caso a causa da morte do verbetado seja conhecida.",
@@ -210,8 +228,34 @@ with tab_preenchimento:
 
 #%% Parentela Política
     with st.expander("**Parentela Política**"):
-        st.write("Conteúdo de Parentela Política")   
-   
+
+        create_anchor("parte2") #ANCORA MENU LATERAL
+                
+
+        # Inicializando a lista de subconteiners na primeira execução
+        if 'parentelas_politicas' not in st.session_state:
+            st.session_state.parentelas_politicas = []
+
+        # Conteiner principal
+        with st.container():
+            # Botão para adicionar novos subconteiners
+            if st.button(":green[**+ Adicionar**]"):
+                add_parentela_politica()
+
+            # Exibindo todos os subconteiners
+            for i, parentela_politica in enumerate(st.session_state.parentelas_politicas):
+                with st.container(border=1):
+                    cols = st.columns([4, 0.5])
+                    with cols[0]:
+                        st.caption(parentela_politica['title'])
+                        parentela_politica['input1'] = st.text_input(f"Input 1 - {parentela_politica['title']}", value=parentela_politica['input1'])
+                        parentela_politica['input2'] = st.text_input(f"Input 2 - {parentela_politica['title']}", value=parentela_politica['input2'])
+                    with cols[1]:
+                        delete_button = st.button(":red[Deletar]", key=f"delete_{i}")
+                        if delete_button:
+                            delete_parentela_politica(i)
+                            st.rerun()  # Recarrega a página para refletir as mudanças
+
 #%% Formação Acadêmica  
     with st.expander("**Formação Acadêmica**"):
         st.write("Conteúdo de Dados do Verbete")
@@ -252,36 +296,6 @@ with tab_preenchimento:
     with st.expander("**Fontes**"):
         st.write("Conteúdo de Parentela Política")    
         
-
-create_anchor("parte2") #ANCORA MENU LATERAL
-        
-
-# Inicializando a lista de subconteiners na primeira execução
-if 'parentelas_politicas' not in st.session_state:
-    st.session_state.parentelas_politicas = []
-
-# Conteiner principal
-with st.container(border=1):
-    st.caption("Parte 2 - Parentela Política")
-
-    # Botão para adicionar novos subconteiners
-    if st.button(":green[**+ Adicionar**]"):
-        add_parentela_politica()
-
-    # Exibindo todos os subconteiners
-    for i, parentela_politica in enumerate(st.session_state.parentelas_politicas):
-        with st.container(border=1):
-            cols = st.columns([4, 0.4])
-            with cols[0]:
-                st.caption(parentela_politica['title'])
-                parentela_politica['input1'] = st.text_input(f"Input 1 - {parentela_politica['title']}", value=parentela_politica['input1'])
-                parentela_politica['input2'] = st.text_input(f"Input 2 - {parentela_politica['title']}", value=parentela_politica['input2'])
-            with cols[1]:
-                delete_button = st.button(":red[Deletar]", key=f"delete_{i}")
-                if delete_button:
-                    delete_parentela_politica(i)
-                    st.rerun()  # Recarrega a página para refletir as mudanças
-
 #%% TEXTO VERBETE
 
 texto_verbete = ''
@@ -301,6 +315,72 @@ cabecalho = f"---\ntitle: {st.session_state['nome_civil'].split()[-1].upper() if
 
 if cabecalho:
     texto_verbete += cabecalho
+
+#%% Introdução
+paragrafo_introducao = f"«{st.session_state['nome_civil'].title()}»" \
+    + (' nasceu' 
+           if st.session_state['data_nascimento']
+           or st.session_state['mun_nascimento']
+           else '') \
+    + ((f' em {st.session_state["mun_nascimento"]}' 
+      + ' (' 
+      + list(estados_br.keys())[list(estados_br.values()).index(st.session_state['uf_nascimento'])] 
+      + ')') 
+         if st.session_state['uf_nascimento']
+         and st.session_state['mun_nascimento']
+         else '') \
+    + (" em" + \
+    (' %s de'%(st.session_state['data_nascimento'].day)) \
+    + (' %s de'%(st.session_state['data_nascimento'].strftime("%B"))) \
+    + (' %s'%(st.session_state['data_nascimento'].year)) 
+        if st.session_state['data_nascimento']
+        else '') \
+    + ((f", filh{'a' if st.session_state['genero'] == 'Feminino' else 'o'} de " +
+        (f"{st.session_state['nome_mae']}" if st.session_state['nome_mae'] else '')  +
+        (', ' +
+        st.session_state['profissao_mae'] 
+        if st.session_state['profissao_mae']
+        and st.session_state['nome_mae']
+        else '') +
+       (' e ' if st.session_state['nome_mae']
+       and st.session_state['nome_pai']
+       else '') + 
+       (f"{st.session_state['nome_pai'] if st.session_state['nome_pai'] else ''}"))
+       if st.session_state['nome_mae']
+       or st.session_state['nome_pai']
+       else '') + \
+        (', ' +
+        st.session_state['profissao_pai'] 
+        if st.session_state['profissao_pai']
+        and st.session_state['nome_pai']
+        else '') \
+    + '. '
+
+if paragrafo_introducao:
+    texto_verbete += paragrafo_introducao
+
+#%% Falecimento    
+
+if 'mun_falecimento' not in st.session_state:
+    st.session_state['mun_falecimento'] = ''
+if st.session_state['data_falecimento'] or st.session_state['mun_falecimento']:            
+    paragrafo_falecimento = " Faleceu em" \
+    + (' %s de'%(st.session_state['data_falecimento'].day)) \
+    + (' %s de'%(st.session_state['data_falecimento'].strftime("%B"))) \
+    + (' %s'%(st.session_state['data_falecimento'].year)) \
+    + ((f' em {st.session_state["mun_falecimento"]}' 
+      + ' (' 
+      + list(estados_br.keys())[list(estados_br.values()).index(st.session_state['uf_falecimento'])]
+      + ')') 
+     if st.session_state['uf_falecimento']
+     and st.session_state['mun_falecimento']
+     else '') \
+    + '. '
+else:
+    paragrafo_falecimento = ''
+
+if paragrafo_falecimento:
+    texto_verbete += paragrafo_falecimento
 
 #%% ÁREA DE PREVIEW
 with tab_preview:
