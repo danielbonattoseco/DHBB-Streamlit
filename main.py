@@ -8,7 +8,7 @@ import locale
 
 ### CONFIGURAÇÕES DE LAYOUT ###
 
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+locale.setlocale(locale.LC_ALL, 'pt_BR')
 
 current_file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(current_file_path)
