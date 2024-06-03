@@ -221,6 +221,7 @@ with tab_preenchimento:
                 key="causa_morte"
             )
 
+    st.session_state['data_falecimento'] = None
 #%% Parentela Política
 
     with st.expander("**Parentela Política**"):                
