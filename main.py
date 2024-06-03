@@ -95,6 +95,7 @@ with tab_preenchimento:
         st.radio("Dicionário do Verbete",
                  ['DHBB','DHBPR'],
                  horizontal=True,
+                 help="DHBB = Dicionário Histórico-Biográfico Brasileiro | DHBPR = Dicionário Histórico-Biográfico da Primeira República",
                  key='dicionario_verbete')
     with col2:
         st.text_input("Autor do verbete", 
@@ -107,9 +108,10 @@ with tab_preenchimento:
         col1,col2 = st.columns(2)
         with col1:
             st.text_input("Nome civil", 
-                            help="Nome civil do verbetado.",
+                            help="Nome completo no registro civil oficial do verbetado.",
                             key="nome_civil")
             st.text_input("Nome social",
+                          help="Nome que o político verbetado adotou para adequar a sua identidade referenciando o nome que o representa.",
                           key="nome_social")
             
         with col2:
@@ -119,6 +121,7 @@ with tab_preenchimento:
                          help='Gênero do verbetado',
                          key="genero")
             st.text_input("Nome político",
+                          help="Nome político/fantasia pelo qual o verbetado é conhecido na política.",
                           key="nome_politico")
 
             
