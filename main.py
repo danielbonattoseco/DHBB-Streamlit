@@ -20,10 +20,10 @@ st.set_page_config(layout="wide",
 st.markdown("""
         <style>
                .block-container {
-                    padding-top: 1rem;
+                    padding-top: 0.5rem;
                     padding-bottom: 0rem;
-                    padding-left: 10rem;
-                    padding-right: 10rem;
+                    padding-left: 0rem;
+                    padding-right: 0rem;
                 }
 }
         </style>
