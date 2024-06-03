@@ -78,7 +78,7 @@ def validate_dates():
         st.session_state['data_falecimento'] = None
     if isinstance(st.session_state.data_nascimento, datetime.date) and isinstance(st.session_state.data_falecimento, datetime.date):
         if st.session_state.data_nascimento >= st.session_state.data_falecimento:
-            st.error("A data de falecimento não pode ser menor que a data de nascimento.")
+            st.warning("A data de falecimento não pode ser menor que a data de nascimento.", icon="⚠️")
             st.session_state['data_falecimento'] = None
         
 #%% CARREGAMENTO DE DADOS
