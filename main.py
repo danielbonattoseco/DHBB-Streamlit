@@ -145,7 +145,7 @@ with tab_preenchimento:
                 st.selectbox("Município de nascimento", 
                               get_municipios(st.session_state.uf_nascimento),
                               index=None,
-                              help="Município da federação onde o verbetado nasceu.  \n\tiny(selecione a UF de nascimento para habilitar o campo)",
+                              help="Município da federação onde o verbetado nasceu.  \n:gray-background[(selecione a UF de nascimento para habilitar este campo)]",
                               key="mun_nascimento")
 
         col7,col8 = st.columns(2)
@@ -185,7 +185,7 @@ with tab_preenchimento:
                     st.selectbox("Município de falecimento", 
                                  get_municipios(st.session_state.uf_falecimento),
                                  index=None,
-                                 help="Município da federação onde o verbetado faleceu.",
+                                 help="Município da federação onde o verbetado faleceu.  \n:gray-background[(selecione a UF de falecimento para habilitar este campo)]",
                                 key="mun_falecimento")
 
         with col8:
