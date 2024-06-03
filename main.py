@@ -95,7 +95,7 @@ with tab_preenchimento:
         st.radio("Dicionário do Verbete",
                  ['DHBB','DHBPR'],
                  horizontal=True,
-                 help=""""DHBB = Dicionário Histórico-Biográfico Brasileiro
+                 help=""""DHBB = Dicionário Histórico-Biográfico Brasileiro  \n
                  DHBPR = Dicionário Histórico-Biográfico da Primeira República""",
                  key='dicionario_verbete')
     with col2:
