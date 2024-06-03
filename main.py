@@ -129,17 +129,20 @@ with tab_preenchimento:
                                 format="DD-MM-YYYY", 
                                 max_value=datetime.date.today(),
                                 min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
+                                help="Data de nascimento do verbetado.",
                                 key="data_nascimento")                
             with col4:
                 st.selectbox("UF de nascimento", 
                               list(estados_br.values()),
                               index=None,
+                              help="Estado da federação onde o verbetado nasceu.",
                               key="uf_nascimento")
             
             with col5:
                 st.selectbox("Município de nascimento", 
                               get_municipios(st.session_state.uf_nascimento),
                               index=None,
+                              help="Município da federação onde o verbetado nasceu.",
                               key="mun_nascimento")
 
         col7,col8 = st.columns(2)
@@ -163,6 +166,7 @@ with tab_preenchimento:
                                     format="DD-MM-YYYY", 
                                     max_value=datetime.date.today(),
                                     min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
+                                    help="Data de falecimento do verbetado.",
                                     key="data_falecimento")
                     st.checkbox("Causa da morte conhecida?", 
                                     help="Marque esta opção caso a causa da morte do verbetado seja conhecida.",
@@ -172,11 +176,13 @@ with tab_preenchimento:
                     st.selectbox("UF de falecimento", 
                                  list(estados_br.values()),
                                  index=None,
+                                 help="Estado da federação onde o verbetado faleceu.",
                                  key="uf_falecimento")
                 with col6:
                     st.selectbox("Município de falecimento", 
                                  get_municipios(st.session_state.uf_falecimento),
                                  index=None,
+                                 help="Minicípio da federação onde o verbetado faleceu.",
                                 key="mun_falecimento")
 
         with col8:
