@@ -77,7 +77,7 @@ with open("dicts/estados_br.json") as f:
 #%% CONSTRUÇÃO 
 
 # IMAGEM CPDOC
-st.image('.streamlit/thumbnails/cpdoc-logo.png', caption=None, width=200, use_column_width=None, clamp=True, channels="RGB", output_format="auto")
+st.image('.streamlit/thumbnails/cpdoc-logo.png', caption=None, width=200, clamp=False, channels="RGB", output_format="auto")
 
 create_anchor("parte1") #ANCORA MENU LATERAL
 
