@@ -227,10 +227,9 @@ with tab_preenchimento:
             )
 
 #%% Parentela Política
-    with st.expander("**Parentela Política**"):
+    create_anchor("parte2") #ANCORA MENU LATERAL
 
-        # create_anchor("parte2") #ANCORA MENU LATERAL
-                
+    with st.expander("**Parentela Política**"):                
 
         # Inicializando a lista de subconteiners na primeira execução
         if 'parentelas_politicas' not in st.session_state:
