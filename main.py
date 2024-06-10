@@ -33,42 +33,214 @@ st.markdown("""
         """, unsafe_allow_html=True)
 
 
-#%% FUNÇÕES 
+#%% FUNÇÕES
+@st.cache_data(ttl=3600)
+def get_municipios_cached(sigla_estado):
+    try:
+        response = requests.get(f'https://servicodados.ibge.gov.br/api/v1/localidades/estados/{sigla_estado}/municipios')
+        return response.json()
+    except requests.exceptions.RequestException:
+        return {}
+
 def get_municipios(sigla_UF, *args):
     """Utiliza a API do IBGE para retornar a lista de municípios no campo correspondente
     do módulo a partir do estado selecionado na UI."""
     
-    if sigla_UF is not None:
+    if sigla_UF:
         sigla_estado = {v: k for k, v in estados_br.items()}[sigla_UF]
     
-        response  = requests.get(
-            'https://servicodados.ibge.gov.br/api/v1/localidades/estados/{}/municipios'.format(
-            sigla_estado
-                )
-            )
+        municipios = get_municipios_cached(sigla_estado)
         
-        municipios = response.json()
-        return [municipio['nome'] for municipio in municipios]
+        if municipios:
+            return [municipio['nome'] for municipio in municipios]
+        else:
+            st.error("Erro ao buscar municípios.")
+    
     else:
         return ''
 
-# Função para adicionar um novo subconteiner
+### CONSTRUTOR LAYOUT - IDENTIFICACAO PESSOAL ###
+def add_conteiner_identificacao_pessoal():
+    col1,col2 = st.columns(2)
+    with col1:
+        st.text_input("Nome civil", 
+                        help="Nome completo no registro civil oficial do verbetado.",
+                        key="nome_civil")
+        st.text_input("Nome social",
+                      help="Nome que o político verbetado adotou para adequar a sua identidade referenciando o nome que o representa.",
+                      key="nome_social")
+        
+    with col2:
+        st.selectbox("Gênero", 
+                     ['Masculino','Feminino'],
+                     index=None,
+                     help='Gênero do verbetado',
+                     key="genero")
+        st.text_input("Nome político",
+                      help="Nome político/fantasia pelo qual o verbetado é conhecido na política.",
+                      key="nome_politico")
+
+        
+    with st.container():
+        col3,col4,col5 = st.columns(3)
+        with col3:
+            st.date_input("Data de nascimento", 
+                            format="DD-MM-YYYY", 
+                            value=None,
+                            max_value=datetime.date.today(),
+                            min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
+                            help="Data de nascimento do verbetado.",
+                            on_change=validate_dates,
+                            key="data_nascimento")                
+        with col4:
+            st.selectbox("UF de nascimento", 
+                          list(estados_br.values()),
+                          index=None,
+                          help="Estado da federação onde o verbetado nasceu.",
+                          key="uf_nascimento")
+        
+        with col5:
+            st.selectbox("Município de nascimento", 
+                          get_municipios(st.session_state.uf_nascimento),
+                          index=None,
+                          help="Município da federação onde o verbetado nasceu.  \n:gray-background[(selecione a UF de nascimento para habilitar este campo)]",
+                          key="mun_nascimento")
+
+    col7,col8 = st.columns(2)
+    with col7:
+        st.text_input("Nome do pai", 
+                        help="Nome civil do pai do verbetado.",
+                        key="nome_pai")
+        st.text_input("Nome da mãe", 
+                        help="Nome civil da mãe do verbetado.",
+                        key="nome_mae")
+        
+        st.checkbox("Falecido(a)?", 
+                        help="Marque esta opção caso o verbetado já tenha falecido.",
+                        key="falecido")
+        
+    if st.session_state.falecido:
+        with st.container():
+            col4,col5,col6 = st.columns(3)
+            with col4:
+                st.date_input("Data de falecimento", 
+                                format="DD-MM-YYYY", 
+                                value=None,
+                                max_value=datetime.date.today(),
+                                min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
+                                help="Data de falecimento do verbetado.",
+                                on_change=validate_dates,
+                                key="data_falecimento")
+                st.checkbox("Causa da morte conhecida?", 
+                                help="Marque esta opção caso a causa da morte do verbetado seja conhecida.",
+                                key="causa_morte_conhecida")
+                
+            with col5:
+                st.selectbox("UF de falecimento", 
+                             list(estados_br.values()),
+                             index=None,
+                             help="Estado da federação onde o verbetado faleceu.",
+                             key="uf_falecimento")
+            with col6:
+                st.selectbox("Município de falecimento", 
+                             get_municipios(st.session_state.uf_falecimento),
+                             index=None,
+                             help="Município da federação onde o verbetado faleceu.  \n:gray-background[(selecione a UF de falecimento para habilitar este campo)]",
+                            key="mun_falecimento")
+
+    with col8:
+        st.text_input("Profissão do pai",
+                      help="Profissão principal exercida pelo pai do verbetado.",
+                      key="profissao_pai")
+        st.text_input("Profissão da mae",
+                      help="Profissão principal exercida pela mãe do verbetado.",
+                      key="profissao_mae")
+    
+    if "causa_morte_conhecida" not in st.session_state: 
+        st.session_state['causa_morte_conhecida'] = False
+    if st.session_state['falecido'] == False:
+        st.session_state['causa_morte_conhecida'] = False
+    
+    if st.session_state.causa_morte_conhecida:
+        st.text_input(
+            "Causa da morte",
+            help="Causa da morte conhecida. Exemplo: Causa natural, suicídio...  \n(Esta informação não integra o corpo do verbete, sendo armazenada apenas como um metadado)",
+            key="causa_morte"
+        )
+
+### CONSTRUTOR LAYOUT - PARENTELA POLITICA ###
+
 def add_parentela_politica():
-    if 'parentelas_politicas' not in st.session_state:
-        st.session_state.parentelas_politicas = []
-    index = len(st.session_state.parentelas_politicas)
+    # if 'parentelas_politicas' not in st.session_state:
+    #     st.session_state.parentelas_politicas = []
     st.session_state.parentelas_politicas.append({
-        'title': f"Parentela Política {index + 1}",
-        'input1': '',
-        'input2': ''
+        'nome' : '',
+        'parentesco' : '',
+        'verbetado' : '',
+        'cargos' : [""]
     })
 
+def add_conteiner_parentela_politica(i, parentela_politica):
+    def add_cargo_parentela_politica():
+        st.session_state.qtdcargos+=1
+        parentela_politica['cargos'].append("")
+        
+    st.caption(f"Parente Político {i+1}")
+    
+    if 'qtdcargos' not in st.session_state:
+        st.session_state.qtdcargos = 1
+        
+    col1, col2 = st.columns([1, 1])
+    with col1:
+        parentela_politica['nome'] = st.text_input("Nome", 
+                                                    value=parentela_politica['nome'],
+                                                    help="Nome civil do parente político do verbetado.",
+                                                    key=f'parente_politico_{i}_nome')
+        
+        parentela_politica['verbetado'] = st.checkbox("Verbetado(a) no DHBB?", 
+                        help="Ative caso o parente do político verbetado mencionado possua um verbete ativo no DHBB.",
+                        key=f'parente_politico_{i}_verbetado')
+
+
+    with col2:
+        parentela_politica['parentesco'] = st.selectbox("Parentesco", 
+                                                        onto_parentela_fem 
+                                                        if st.session_state.genero == 'Feminino' 
+                                                        else onto_parentela_masc,
+                                                        index=None,
+                                                        help="Tipo de parentesco que o verbetado possui com o parente político.",
+                                                        key=f'parente_politico_{i}_parentesco'
+                                                        )
+        
+    st.warning('CARGOS BUGADO')
+    for j in range(st.session_state.qtdcargos):
+        parentela_politica['cargos'][j] = (st.text_input(f"Cargo {j+1}", 
+                                                    value=parentela_politica['cargos'][j],
+                                                    help="Cargo ocupado pelo parente político do verbetado.",
+                                                    key=f'parente_politico_{i}_cargo_{j}'))
+    
+
+    st.button(":orange[Adicionar Cargo]", 
+              on_click=add_cargo_parentela_politica,
+              key=f"add_cargo_{i}")
+
+    st.button(":red[Deletar Parente Político]", 
+              on_click=delete_parentela_politica,
+              args=(i,),
+              key=f"delete_{i}")
+    
+
+
 # Função para deletar um subconteiner específico
-def delete_parentela_politica(index):
-    if 'parentelas_politicas' in st.session_state and 0 <= index < len(st.session_state.parentelas_politicas):
-        st.session_state.parentelas_politicas.pop(index)
+def delete_parentela_politica(i):
+    if 'parentelas_politicas' in st.session_state and 0 <= i < len(st.session_state.parentelas_politicas):
+        st.session_state.parentelas_politicas.pop(i)
+
+### CONSTRUTOR LAYOUT - X ###
 
 def validate_dates():
+    """Valida os campos de data para impedir que datas impossíveis sejam inseridas."""
+
     if "data_nascimento" not in st.session_state: 
         st.session_state['data_nascimento'] = None
     if "data_falecimento" not in st.session_state: 
@@ -83,7 +255,8 @@ def validate_dates():
 with open("dicts/estados_br.json") as f:
     estados_br = json.load(f)
 
-# siglas_estados = {v: k for k, v in estados_br.items()}
+onto_parentela_masc = ['afilhado', 'avô', 'bisavô', 'bisneto', 'companheiro', 'cunhado', 'enteado', 'esposo', 'ex-esposo', 'filho', 'genro', 'herdeiro', 'irmão', 'meio-irmão', 'neto', 'noivo', 'padrasto', 'padrinho', 'pai', 'primo', 'sobrinho', 'sobrinho-neto', 'sogro', 'tataravô', 'tio', 'tio-avô', 'viúvo']
+onto_parentela_fem = ['afilhada', 'avó', 'bisavó', 'bisneta', 'companheira', 'cunhada', 'enteada', 'esposa', 'ex-esposa', 'filha', 'nora', 'herdeira', 'irmã', 'meia-irmã', 'neta', 'noiva', 'madrasta', 'madrinha', 'mãe', 'prima', 'sobrinha', 'sobrinha-neta', 'sogra', 'tataravó', 'tia', 'tia-avó', 'viúva']
 
 #%% CONSTRUÇÃO 
 
@@ -114,113 +287,8 @@ with tab_preenchimento:
 #%% Identificação Pessoal
     with st.expander("**Identificação Pessoal**",
                      expanded=True):
-        col1,col2 = st.columns(2)
-        with col1:
-            st.text_input("Nome civil", 
-                            help="Nome completo no registro civil oficial do verbetado.",
-                            key="nome_civil")
-            st.text_input("Nome social",
-                          help="Nome que o político verbetado adotou para adequar a sua identidade referenciando o nome que o representa.",
-                          key="nome_social")
-            
-        with col2:
-            st.selectbox("Gênero", 
-                         ['Masculino','Feminino'],
-                         index=None,
-                         help='Gênero do verbetado',
-                         key="genero")
-            st.text_input("Nome político",
-                          help="Nome político/fantasia pelo qual o verbetado é conhecido na política.",
-                          key="nome_politico")
-
-            
-        with st.container():
-            col3,col4,col5 = st.columns(3)
-            with col3:
-                st.date_input("Data de nascimento", 
-                                format="DD-MM-YYYY", 
-                                value=None,
-                                max_value=datetime.date.today(),
-                                min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
-                                help="Data de nascimento do verbetado.",
-                                on_change=validate_dates,
-                                key="data_nascimento")                
-            with col4:
-                st.selectbox("UF de nascimento", 
-                              list(estados_br.values()),
-                              index=None,
-                              help="Estado da federação onde o verbetado nasceu.",
-                              key="uf_nascimento")
-            
-            with col5:
-                st.selectbox("Município de nascimento", 
-                              get_municipios(st.session_state.uf_nascimento),
-                              index=None,
-                              help="Município da federação onde o verbetado nasceu.  \n:gray-background[(selecione a UF de nascimento para habilitar este campo)]",
-                              key="mun_nascimento")
-
-        col7,col8 = st.columns(2)
-        with col7:
-            st.text_input("Nome do pai", 
-                            help="Nome civil do pai do verbetado.",
-                            key="nome_pai")
-            st.text_input("Nome da mãe", 
-                            help="Nome civil da mãe do verbetado.",
-                            key="nome_mae")
-            
-            st.checkbox("Falecido(a)?", 
-                            help="Marque esta opção caso o verbetado já tenha falecido.",
-                            key="falecido")
-            
-        if st.session_state.falecido:
-            with st.container():
-                col4,col5,col6 = st.columns(3)
-                with col4:
-                    st.date_input("Data de falecimento", 
-                                    format="DD-MM-YYYY", 
-                                    value=None,
-                                    max_value=datetime.date.today(),
-                                    min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
-                                    help="Data de falecimento do verbetado.",
-                                    on_change=validate_dates,
-                                    key="data_falecimento")
-                    st.checkbox("Causa da morte conhecida?", 
-                                    help="Marque esta opção caso a causa da morte do verbetado seja conhecida.",
-                                    key="causa_morte_conhecida")
-                    
-                with col5:
-                    st.selectbox("UF de falecimento", 
-                                 list(estados_br.values()),
-                                 index=None,
-                                 help="Estado da federação onde o verbetado faleceu.",
-                                 key="uf_falecimento")
-                with col6:
-                    st.selectbox("Município de falecimento", 
-                                 get_municipios(st.session_state.uf_falecimento),
-                                 index=None,
-                                 help="Município da federação onde o verbetado faleceu.  \n:gray-background[(selecione a UF de falecimento para habilitar este campo)]",
-                                key="mun_falecimento")
-
-        with col8:
-            st.text_input("Profissão do pai",
-                          help="Profissão principal exercida pelo pai do verbetado.",
-                          key="profissao_pai")
-            st.text_input("Profissão da mae",
-                          help="Profissão principal exercida pela mãe do verbetado.",
-                          key="profissao_mae")
+        add_conteiner_identificacao_pessoal()
         
-        if "causa_morte_conhecida" not in st.session_state: 
-            st.session_state['causa_morte_conhecida'] = False
-        if st.session_state['falecido'] == False:
-            st.session_state['causa_morte_conhecida'] = False
-        
-        if st.session_state.causa_morte_conhecida:
-            st.text_input(
-                "Causa da morte",
-                help="Causa da morte conhecida. Exemplo: Causa natural, suicídio...  \n(Esta informação não integra o corpo do verbete, sendo armazenada apenas como um metadado)",
-                key="causa_morte"
-            )
-
 #%% Parentela Política
 
     with st.expander("**Parentela Política**"):                
@@ -231,23 +299,20 @@ with tab_preenchimento:
 
         # Conteiner principal
         with st.container():
-            # Botão para adicionar novos subconteiners
-            if st.button(":green[**+ Adicionar**]"):
+            
+            if len(st.session_state.parentelas_politicas) < 1:
                 add_parentela_politica()
-
+            
             # Exibindo todos os subconteiners
             for i, parentela_politica in enumerate(st.session_state.parentelas_politicas):
                 with st.container(border=1):
-                    cols = st.columns([4, 0.5])
-                    with cols[0]:
-                        st.caption(parentela_politica['title'])
-                        parentela_politica['input1'] = st.text_input(f"Input 1 - {parentela_politica['title']}", value=parentela_politica['input1'])
-                        parentela_politica['input2'] = st.text_input(f"Input 2 - {parentela_politica['title']}", value=parentela_politica['input2'])
-                    with cols[1]:
-                        delete_button = st.button(":red[Deletar]", key=f"delete_{i}")
-                        if delete_button:
-                            delete_parentela_politica(i)
-                            st.rerun()  # Recarrega a página para refletir as mudanças
+                    add_conteiner_parentela_politica(i, parentela_politica)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=add_parentela_politica,
+                      key=f"insert_{i}")
+                
 
 #%% Formação Acadêmica  
     with st.expander("**Formação Acadêmica**"):
@@ -290,6 +355,14 @@ with tab_preenchimento:
         st.write("Em breve! :eyes:")
         
 #%% TEXTO VERBETE
+#################
+#################
+#################
+#################
+#################
+#################
+#################
+
 
 texto_verbete = ''
 
