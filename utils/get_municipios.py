@@ -16,7 +16,7 @@ def get_municipios_IBGE(sigla_estado):
 def get_municipios(sigla_UF, *args):
     """Retorna para a UI a lista de municípios."""
     if sigla_UF:
-        sigla_estado = {v: k for k, v in estados_br().values()}[sigla_UF]
+        sigla_estado = {v: k for k, v in estados_br()}[sigla_UF]
     
         municipios = get_municipios_IBGE(sigla_estado)
         
