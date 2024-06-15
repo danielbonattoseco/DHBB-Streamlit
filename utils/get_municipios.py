@@ -1,12 +1,9 @@
 import requests
 import streamlit as st
-import json
-
-# DICIONARIO DE CÓDIGOS DE MUNICÍPIOS
-with open("dicts/estados_br.json") as f:
-    estados_br = json.load(f)
+from utils.estados_br import estados_br
 
 @st.cache_data(ttl=3600)
+
 def get_municipios_IBGE(sigla_estado):
     """Utiliza a API do IBGE para retornar a lista de municípios no campo correspondente
     do módulo a partir do estado selecionado na UI."""
