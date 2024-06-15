@@ -38,7 +38,7 @@ def add_conteiner_identificacao_pessoal():
                             key="data_nascimento")                
         with col4:
             st.selectbox("UF de nascimento", 
-                          list(estados_br()),
+                          list(estados_br().values()),
                           index=None,
                           help="Estado da federação onde o verbetado nasceu.",
                           key="uf_nascimento")
@@ -81,7 +81,7 @@ def add_conteiner_identificacao_pessoal():
                 
             with col5:
                 st.selectbox("UF de falecimento", 
-                             list(estados_br.values()),
+                             list(estados_br().values()),
                              index=None,
                              help="Estado da federação onde o verbetado faleceu.",
                              key="uf_falecimento")
