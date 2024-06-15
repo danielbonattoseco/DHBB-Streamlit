@@ -3,8 +3,8 @@ import datetime
 import json
 import os
 from streamlit_extras.stylable_container import stylable_container
-import requests
 import locale
+from utils.get_municipios import get_municipios
 
 ### CONFIGURAÇÕES DE LAYOUT ###
 
@@ -34,30 +34,6 @@ st.markdown("""
 
 
 #%% FUNÇÕES
-@st.cache_data(ttl=3600)
-def get_municipios_cached(sigla_estado):
-    try:
-        response = requests.get(f'https://servicodados.ibge.gov.br/api/v1/localidades/estados/{sigla_estado}/municipios')
-        return response.json()
-    except requests.exceptions.RequestException:
-        return {}
-
-def get_municipios(sigla_UF, *args):
-    """Utiliza a API do IBGE para retornar a lista de municípios no campo correspondente
-    do módulo a partir do estado selecionado na UI."""
-    
-    if sigla_UF:
-        sigla_estado = {v: k for k, v in estados_br.items()}[sigla_UF]
-    
-        municipios = get_municipios_cached(sigla_estado)
-        
-        if municipios:
-            return [municipio['nome'] for municipio in municipios]
-        else:
-            st.error("Erro ao buscar municípios.")
-    
-    else:
-        return ''
 
 ### CONSTRUTOR LAYOUT - IDENTIFICACAO PESSOAL ###
 def add_conteiner_identificacao_pessoal():
