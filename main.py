@@ -164,7 +164,7 @@ paragrafo_introducao = f"«{st.session_state['nome_civil'].title()}»" \
            else '') \
     + ((f' em {st.session_state["mun_nascimento"]}' 
       + ' (' 
-      + list(estados_br.keys())[list(estados_br.values()).index(st.session_state['uf_nascimento'])] 
+      + list(estados_br().keys())[list(estados_br().values()).index(st.session_state['uf_nascimento'])] 
       + ')') 
          if st.session_state['uf_nascimento']
          and st.session_state['mun_nascimento']
@@ -212,7 +212,7 @@ if st.session_state['data_falecimento'] or st.session_state['mun_falecimento']:
     + (' %s'%(st.session_state['data_falecimento'].year)) \
     + ((f' em {st.session_state["mun_falecimento"]}' 
       + ' (' 
-      + list(estados_br.keys())[list(estados_br.values()).index(st.session_state['uf_falecimento'])]
+      + list(estados_br().keys())[list(estados_br().values()).index(st.session_state['uf_falecimento'])]
       + ')') 
      if st.session_state['uf_falecimento']
      and st.session_state['mun_falecimento']
