@@ -5,6 +5,10 @@ import locale
 from utils.estados_br import estados_br
 import layout.identificacao_pessoal
 import layout.parentela_politica
+import layout.formacao_academica
+import layout.trajetoria_politica
+
+
 
 ### CONFIGURAÇÕES DE LAYOUT ###
 
@@ -19,22 +23,40 @@ st.set_page_config(layout="wide",
                    page_title="Gerador de Verbetes DHBB/CPDOC",
                    page_icon="images/fgv-logo.ico")
 
-# FORMATAÇÃO DE ESTILOS 
+
 st.markdown("""
         <style>
                .block-container {
                     padding-top: 4rem;
                     padding-bottom: 2rem;
-                    padding-left: 3rem;
-                    padding-right: 3rem;
+                    padding-left: 2rem;
+                    padding-right: 2rem;
                 }
+               .seletor_data {
+                   padding-bottom: 0.3.rem;
+                   font-size: 14px;
+                   }
 }
         </style>
         """, unsafe_allow_html=True)
+        
+# FORMATAÇÃO DE ESTILOS 
+# st.markdown("""
+#         <style>
+#                .block-container {
+#                     padding-top: 4rem;
+#                     padding-bottom: 2rem;
+#                     padding-left: 3rem;
+#                     padding-right: 3rem;
+#                 }
+#                 [data-key="seletor_data"] {
+#                     gap: 0.15rem;
+#                 }
+# }
+#         </style>
+#         """, unsafe_allow_html=True)
 
-
-#%% CONSTRUÇÃO 
-
+    
 # IMAGEM CPDOC
 st.image('.streamlit/thumbnails/cpdoc-logo.png', caption=None, width=200, clamp=False, channels="RGB", output_format="auto")
 
@@ -86,15 +108,52 @@ with tab_preenchimento:
             # Botão para adicionar novos subconteiners
             st.button(":green[**+ Adicionar**]",
                       on_click=layout.parentela_politica.add_parentela_politica,
-                      key=f"insert_{i}")
+                      key=f"insert_parentela_politica_{i}")
                 
 #%% Formação Acadêmica  
     with st.expander("**Formação Acadêmica**"):
-        st.write("Em breve! :eyes:")
+        # Inicializando a lista de subconteiners na primeira execução
+        if 'formacoes_academicas' not in st.session_state:
+            st.session_state.formacoes_academicas = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.formacoes_academicas) < 1:
+                layout.formacao_academica.add_formacao_academica()
+            
+            # Exibindo todos os subconteiners
+            for i, formacao_academica in enumerate(st.session_state.formacoes_academicas):
+                with st.container(border=1):
+                    layout.formacao_academica.add_conteiner_formacao_academica(i, formacao_academica)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.formacao_academica.add_formacao_academica,
+                      key=f"insert_formacao_academica_{i}")
+
    
 #%% Trajetória Política
     with st.expander("**Trajetória Política**"):
-        st.write("Em breve! :eyes:")
+        if 'trajetorias_politicas' not in st.session_state:
+            st.session_state.trajetorias_politicas = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.trajetorias_politicas) < 1:
+                layout.trajetoria_politica.add_trajetoria_politica()
+            
+            # Exibindo todos os subconteiners
+            for i, trajetoria_politica in enumerate(st.session_state.trajetorias_politicas):
+                with st.container(border=1):
+                    layout.trajetoria_politica.add_conteiner_trajetoria_politica(i, trajetoria_politica)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.trajetoria_politica.add_trajetoria_politica,
+                      key=f"insert_trajetoria_politica_{i}")
+
     
 #%% Atuação Legislativa
     with st.expander("**Atuação Legislativa**"):
@@ -128,6 +187,9 @@ with tab_preenchimento:
     with st.expander("**Fontes**"):
         st.write("Em breve! :eyes:")
         
+
+
+
 #%% TEXTO VERBETE
 #################
 #################
@@ -263,6 +325,7 @@ with st.sidebar:
             language="markdown", 
             line_numbers=True
         )
+
 
     # st.header("Menu")
     # st.markdown("🖊 [Parte 1 - Informações Pessoais](#parte1)")

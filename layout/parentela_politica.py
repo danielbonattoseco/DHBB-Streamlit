@@ -2,8 +2,6 @@ import streamlit as st
 import utils.ontologia_parentela
 
 def add_parentela_politica():
-    # if 'parentelas_politicas' not in st.session_state:
-    #     st.session_state.parentelas_politicas = []
     st.session_state.parentelas_politicas.append({
         'nome' : '',
         'parentesco' : '',
@@ -13,15 +11,12 @@ def add_parentela_politica():
 
 def add_conteiner_parentela_politica(i, parentela_politica):
     def add_cargo_parentela_politica():
-        st.session_state.qtdcargos+=1
         parentela_politica['cargos'].append("")
+        st.toast(len(parentela_politica['cargos']))
         
     st.caption(f"Parente Político {i+1}")
-    
-    if 'qtdcargos' not in st.session_state:
-        st.session_state.qtdcargos = 1
-        
-    col1, col2 = st.columns([1, 1])
+            
+    col1, col2 = st.columns(2)
     with col1:
         parentela_politica['nome'] = st.text_input("Nome", 
                                                     value=parentela_politica['nome'],
@@ -43,8 +38,7 @@ def add_conteiner_parentela_politica(i, parentela_politica):
                                                         key=f'parente_politico_{i}_parentesco'
                                                         )
         
-    st.warning('CARGOS BUGADO')
-    for j in range(st.session_state.qtdcargos):
+    for j in range(len(parentela_politica['cargos'])):
         parentela_politica['cargos'][j] = (st.text_input(f"Cargo {j+1}", 
                                                     value=parentela_politica['cargos'][j],
                                                     help="Cargo ocupado pelo parente político do verbetado.",
@@ -58,7 +52,7 @@ def add_conteiner_parentela_politica(i, parentela_politica):
     st.button(":red[Deletar Parente Político]", 
               on_click=delete_parentela_politica,
               args=(i,),
-              key=f"delete_{i}")
+              key=f"delete_parentela_politica_{i}")
     
 
 
