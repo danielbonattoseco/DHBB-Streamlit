@@ -1,12 +1,7 @@
 import streamlit as st
 import datetime
-from datetime import date
-from utils.estados_br import estados_br
-from utils.get_municipios import get_municipios
 from utils.formatar_data import formatar_data
 from utils.partidos_politicos import partidos_politicos
-
-import streamlit.components.v1 as components
 
 def add_trajetoria_politica():
     st.session_state.trajetorias_politicas.append({
@@ -40,7 +35,7 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
         
         trajetoria_politica['eleito'] = st.checkbox("Foi eleito para o cargo?", 
                                         help="Marque esta opção caso o candidato tenha sido eleito para o cargo disputado.",
-                                        key="trajetoria_politica_{i}_eleito")
+                                        key=f"trajetoria_politica_{i}_eleito")
 
         
     with col2:
@@ -51,23 +46,22 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
         with st.container():
             col1,col2,col3 = st.columns([0.7,0.7,1])
             with col1:
-                dia = st.selectbox("Data do pleito", 
+                dia = st.selectbox("Dia", 
                             range(1,32),
                             index=None,
                             label_visibility="collapsed",
                             key=f"trajetoria_politica_{i}_dia_pleito")
             with col2:
-                mes = st.selectbox("", 
+                mes = st.selectbox("Mes", 
                             range(1,13),
                             index=None,
                             label_visibility="collapsed",
                             key=f"trajetoria_politica_{i}_mes_pleito")
             with col3:
-                ano = st.selectbox("", 
+                ano = st.selectbox("Ano", 
                         range(1900, datetime.date.today().year+1),
                         index=None,
                         label_visibility="collapsed",
-                        help="Ano em que o político verbetado se candidatou ao cargo.",
                         key=f"trajetoria_politica_{i}_ano_pleito")
                 
             trajetoria_politica['ano_pleito'] = formatar_data(ano,mes,dia)
@@ -76,7 +70,8 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
                                                        min_value=0,
                                                        value=None,
                                                        format="%d",
-                                                       help="Quantidade de votos que o verbetado recebeu na candidatura.")
+                                                       help="Quantidade de votos que o verbetado recebeu na candidatura.",
+                                                       key=f"trajetoria_politica_{i}_votos")
 
                 
 
