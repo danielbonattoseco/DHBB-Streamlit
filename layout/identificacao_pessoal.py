@@ -63,6 +63,15 @@ def add_conteiner_identificacao_pessoal():
                         help="Marque esta opção caso o verbetado já tenha falecido.",
                         key="falecido")
         
+    with col8:
+        st.text_input("Profissão do pai",
+                      help="Profissão principal exercida pelo pai do verbetado.",
+                      key="profissao_pai")
+        st.text_input("Profissão da mae",
+                      help="Profissão principal exercida pela mãe do verbetado.",
+                      key="profissao_mae")
+
+
     if st.session_state.falecido:
         with st.container():
             col4,col5,col6 = st.columns(3)
@@ -91,23 +100,25 @@ def add_conteiner_identificacao_pessoal():
                              index=None,
                              help="Município da federação onde o verbetado faleceu.  \n:gray-background[(selecione a UF de falecimento para habilitar este campo)]",
                             key="mun_falecimento")
-
-    with col8:
-        st.text_input("Profissão do pai",
-                      help="Profissão principal exercida pelo pai do verbetado.",
-                      key="profissao_pai")
-        st.text_input("Profissão da mae",
-                      help="Profissão principal exercida pela mãe do verbetado.",
-                      key="profissao_mae")
+                
+        if st.session_state.causa_morte_conhecida:
+            st.text_input(
+                "Causa da morte",
+                help="Causa da morte conhecida. Exemplo: Causa natural, suicídio...  \n(Esta informação não integra o corpo do verbete, sendo armazenada apenas como um metadado)",
+                key="causa_morte"
+            )
+            
+        else:
+            if "causa_morte" in st.session_state:
+                del st.session_state["causa_morte"]
+            
+    else:
+        for j in ['data_falecimento',
+                  'causa_morte_conhecida',
+                  'uf_falecimento',
+                  'mun_falecimento',
+                  'causa_morte']:
+            if j in st.session_state:
+                del st.session_state[j]
+            
     
-    if "causa_morte_conhecida" not in st.session_state: 
-        st.session_state['causa_morte_conhecida'] = False
-    if st.session_state['falecido'] == False:
-        st.session_state['causa_morte_conhecida'] = False
-    
-    if st.session_state.causa_morte_conhecida:
-        st.text_input(
-            "Causa da morte",
-            help="Causa da morte conhecida. Exemplo: Causa natural, suicídio...  \n(Esta informação não integra o corpo do verbete, sendo armazenada apenas como um metadado)",
-            key="causa_morte"
-        )
