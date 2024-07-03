@@ -55,7 +55,6 @@ def add_conteiner_parentela_politica(i, parentela_politica):
               key=f"delete_parentela_politica_{i}")
     
 
-
 # Função para deletar um subconteiner específico
 def delete_parentela_politica(i):
     if 'parentelas_politicas' in st.session_state and 0 <= i < len(st.session_state.parentelas_politicas):
