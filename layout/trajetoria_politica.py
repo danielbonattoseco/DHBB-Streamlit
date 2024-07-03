@@ -151,13 +151,13 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
                     del st.session_state[f"trajetoria_politica_{i}_{j}"]
                 del trajetoria_politica[j]
 
+    st.button(":red[Deletar Trajetória Política]", 
+              on_click=delete_trajetoria_politica,
+              args=(i,),
+              key=f"deleteTrajetoriaPolitica{i}")
 
-
-
-
-
-
-
-
-
+# Função para deletar um subconteiner específico
+def delete_trajetoria_politica(i):
+    if 'trajetorias_politicas' in st.session_state and 0 <= i < len(st.session_state.trajetorias_politicas):
+        st.session_state.trajetorias_politicas.pop(i)
 

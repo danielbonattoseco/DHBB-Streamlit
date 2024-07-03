@@ -7,7 +7,7 @@ import layout.identificacao_pessoal
 import layout.parentela_politica
 import layout.formacao_academica
 import layout.trajetoria_politica
-
+import layout.atuacao_legislativa
 
 
 ### CONFIGURAÇÕES DE LAYOUT ###
@@ -157,7 +157,24 @@ with tab_preenchimento:
     
 #%% Atuação Legislativa
     with st.expander("**Atuação Legislativa**"):
-        st.write("Em breve! :eyes:")
+        if 'atuacoes_legislativas' not in st.session_state:
+            st.session_state.atuacoes_legislativas = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.atuacoes_legislativas) < 1:
+                layout.atuacao_legislativa.add_atuacao_legislativa()
+            
+            # Exibindo todos os subconteiners
+            for i, atuacao_legislativa in enumerate(st.session_state.atuacoes_legislativas):
+                with st.container(border=1):
+                    layout.atuacao_legislativa.add_conteiner_atuacao_legislativa(i, atuacao_legislativa)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.atuacao_legislativa.add_atuacao_legislativa,
+                      key=f"insert_atuacao_legislativa_{i}")
         
 #%% Trajetória na Burocracia Estatal
     with st.expander("**Trajetória na Burocracia Estatal**"):
