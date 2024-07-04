@@ -8,7 +8,7 @@ import layout.parentela_politica
 import layout.formacao_academica
 import layout.trajetoria_politica
 import layout.atuacao_legislativa
-
+import layout.burocracia_estatal
 
 ### CONFIGURAÇÕES DE LAYOUT ###
 
@@ -75,11 +75,11 @@ with tab_preenchimento:
                  ['DHBB','DHBPR'],
                  horizontal=True,
                  help="**DHBB** = Dicionário Histórico-Biográfico Brasileiro  \n**DHBPR** = Dicionário Histórico-Biográfico da Primeira República",
-                 key='dicionario_verbete')
+                 key='dicionarioVerbete')
     with col2:
         st.text_input("Autor do verbete", 
                         help="Nome civil do autor do verbete.",
-                        key="nome_autor_verbete")
+                        key="nomeAutorVerbete")
 
 #%% Identificação Pessoal
     with st.expander("**Identificação Pessoal**",
@@ -108,7 +108,7 @@ with tab_preenchimento:
             # Botão para adicionar novos subconteiners
             st.button(":green[**+ Adicionar**]",
                       on_click=layout.parentela_politica.add_parentela_politica,
-                      key=f"insert_parentela_politica_{i}")
+                      key=f"insertParentelaPolitica{i}")
                 
 #%% Formação Acadêmica  
     with st.expander("**Formação Acadêmica**"):
@@ -130,7 +130,7 @@ with tab_preenchimento:
             # Botão para adicionar novos subconteiners
             st.button(":green[**+ Adicionar**]",
                       on_click=layout.formacao_academica.add_formacao_academica,
-                      key=f"insert_formacao_academica_{i}")
+                      key=f"insertFormacaoAcademica{i}")
 
    
 #%% Trajetória Política
@@ -152,7 +152,7 @@ with tab_preenchimento:
             # Botão para adicionar novos subconteiners
             st.button(":green[**+ Adicionar**]",
                       on_click=layout.trajetoria_politica.add_trajetoria_politica,
-                      key=f"insert_trajetoria_politica_{i}")
+                      key=f"insertTrajetoriaPolitica{i}")
 
     
 #%% Atuação Legislativa
@@ -174,11 +174,28 @@ with tab_preenchimento:
             # Botão para adicionar novos subconteiners
             st.button(":green[**+ Adicionar**]",
                       on_click=layout.atuacao_legislativa.add_atuacao_legislativa,
-                      key=f"insert_atuacao_legislativa_{i}")
+                      key=f"insertAtuacaoLegislativa{i}")
         
 #%% Trajetória na Burocracia Estatal
     with st.expander("**Trajetória na Burocracia Estatal**"):
-        st.write("Em breve! :eyes:")
+        if 'burocracias_estatais' not in st.session_state:
+            st.session_state.burocracias_estatais = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.burocracias_estatais) < 1:
+                layout.burocracia_estatal.add_burocracia_estatal()
+            
+            # Exibindo todos os subconteiners
+            for i, burocracia_estatal in enumerate(st.session_state.burocracias_estatais):
+                with st.container(border=1):
+                    layout.burocracia_estatal.add_conteiner_burocracia_estatal(i, burocracia_estatal)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.burocracia_estatal.add_burocracia_estatal,
+                      key=f"insertBurocraciaEstatal{i}")
     
 #%% Atuação na Imprensa
     with st.expander("**Atuação na Imprensa**"):
