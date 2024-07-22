@@ -24,16 +24,19 @@ def add_conteiner_parentela_politica(i, parentela_politica):
                                                     key=f'parente_politico_{i}_nome')
         
         parentela_politica['verbetado'] = st.checkbox("Verbetado(a) no DHBB?", 
-                        help="Ative caso o parente do político verbetado mencionado possua um verbete ativo no DHBB.",
-                        key=f'parente_politico_{i}_verbetado')
+                                                      value = True if parentela_politica['verbetado'] else False,
+                                                      help="Ative caso o parente do político verbetado mencionado possua um verbete ativo no DHBB.",
+                                                      key=f'parente_politico_{i}_verbetado')
 
 
     with col2:
+        options = utils.ontologia_parentela.feminina() if st.session_state.genero == 'Feminino' else utils.ontologia_parentela.masculina()
         parentela_politica['parentesco'] = st.selectbox("Parentesco", 
-                                                        utils.ontologia_parentela.feminina()
-                                                        if st.session_state.genero == 'Feminino' 
-                                                        else utils.ontologia_parentela.masculina(),
-                                                        index=None,
+                                                        options,
+                                                        index=options.index(parentela_politica['parentesco'])
+                                                        if parentela_politica['parentesco'] 
+                                                        in options
+                                                        else None,
                                                         help="Tipo de parentesco que o verbetado possui com o parente político.",
                                                         key=f'parente_politico_{i}_parentesco'
                                                         )

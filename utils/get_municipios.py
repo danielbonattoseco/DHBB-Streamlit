@@ -26,4 +26,4 @@ def get_municipios(sigla_UF, *args):
             st.error("Erro ao buscar municípios.")
     
     else:
-        return ''
+        return []

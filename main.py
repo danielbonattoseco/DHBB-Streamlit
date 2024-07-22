@@ -9,6 +9,12 @@ import layout.formacao_academica
 import layout.trajetoria_politica
 import layout.atuacao_legislativa
 import layout.burocracia_estatal
+import layout.atuacao_imprensa
+import layout.obra_do_verbetado
+import layout.obra_sobre_verbetado
+import layout.processo_criminal
+import layout.conjuge
+import layout.fonte
 
 ### CONFIGURAÇÕES DE LAYOUT ###
 
@@ -199,30 +205,133 @@ with tab_preenchimento:
     
 #%% Atuação na Imprensa
     with st.expander("**Atuação na Imprensa**"):
-        st.write("Em breve! :eyes:")
+        if 'atuacoes_imprensa' not in st.session_state:
+            st.session_state.atuacoes_imprensa = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.atuacoes_imprensa) < 1:
+                layout.atuacao_imprensa.add_atuacao_imprensa()
+            
+            # Exibindo todos os subconteiners
+            for i, atuacao_imprensa in enumerate(st.session_state.atuacoes_imprensa):
+                with st.container(border=1):
+                    layout.atuacao_imprensa.add_conteiner_atuacao_imprensa(i, atuacao_imprensa)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.atuacao_imprensa.add_atuacao_imprensa,
+                      key=f"insertAtuacaoImprensa{i}")
+
     
 #%% Obras publicadas pelo verbetado
     with st.expander("**Obras publicadas pelo verbetado**"):
-        st.write("Em breve! :eyes:")
+        if 'obras_do_verbetado' not in st.session_state:
+            st.session_state.obras_do_verbetado = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.obras_do_verbetado) < 1:
+                layout.obra_do_verbetado.add_obra_do_verbetado()
+            
+            # Exibindo todos os subconteiners
+            for i, obra_do_verbetado in enumerate(st.session_state.obras_do_verbetado):
+                with st.container(border=1):
+                    layout.obra_do_verbetado.add_conteiner_obra_do_verbetado(i, obra_do_verbetado)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.obra_do_verbetado.add_obra_do_verbetado,
+                      key=f"insertObraDoVerbetado{i}")
+
        
 #%% Obras publicadas sobre o verbetado
     with st.expander("**Obras publicadas sobre o verbetado**"):
-        st.write("Em breve! :eyes:")
+        if 'obras_sobre_verbetado' not in st.session_state:
+            st.session_state.obras_sobre_verbetado = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.obras_sobre_verbetado) < 1:
+                layout.obra_sobre_verbetado.add_obra_sobre_verbetado()
+            
+            # Exibindo todos os subconteiners
+            for i, obra_sobre_verbetado in enumerate(st.session_state.obras_sobre_verbetado):
+                with st.container(border=1):
+                    layout.obra_sobre_verbetado.add_conteiner_obra_sobre_verbetado(i, obra_sobre_verbetado)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.obra_sobre_verbetado.add_obra_sobre_verbetado,
+                      key=f"insertObraSobreVerbetado{i}")
     
 #%% Processos Criminais Concluídos e Condenações
     with st.expander("**Processos Criminais Concluídos e Condenações**"):
-        st.write("Em breve! :eyes:")
+        if 'processos_criminais' not in st.session_state:
+            st.session_state.processos_criminais = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.processos_criminais) < 1:
+                layout.processo_criminal.add_processo_criminal()
+            
+            # Exibindo todos os subconteiners
+            for i, processo_criminal in enumerate(st.session_state.processos_criminais):
+                with st.container(border=1):
+                    layout.processo_criminal.add_conteiner_processo_criminal(i, processo_criminal)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.processo_criminal.add_processo_criminal,
+                      key=f"insertProcessoCriminal{i}")
+
     
 #%% Cônjuges
     with st.expander("**Cônjuges**"):
-        st.write("Em breve! :eyes:")
+        if 'conjuges' not in st.session_state:
+            st.session_state.conjuges = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.conjuges) < 1:
+                layout.conjuge.add_conjuge()
+            
+            # Exibindo todos os subconteiners
+            for i, conjuge in enumerate(st.session_state.conjuges):
+                with st.container(border=1):
+                    layout.conjuge.add_conteiner_conjuge(i, conjuge)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.conjuge.add_conjuge,
+                      key=f"insertConjuge{i}")
         
 #%% Fontes
     with st.expander("**Fontes**"):
-        st.write("Em breve! :eyes:")
+        if 'fontes' not in st.session_state:
+            st.session_state.fontes = []
+
+        # Conteiner principal
+        with st.container():
+            
+            if len(st.session_state.fontes) < 1:
+                layout.fonte.add_fonte()
+            
+            # Exibindo todos os subconteiners
+            for i, fonte in enumerate(st.session_state.fontes):
+                with st.container(border=1):
+                    layout.fonte.add_conteiner_fonte(i, fonte)
+
+            # Botão para adicionar novos subconteiners
+            st.button(":green[**+ Adicionar**]",
+                      on_click=layout.fonte.add_fonte,
+                      key=f"insertFonte{i}")
         
-
-
 
 #%% TEXTO VERBETE
 #################
@@ -322,6 +431,7 @@ if paragrafo_falecimento:
 
 #%% ÁREA DE PREVIEW
 with tab_preview:
+    
     st.write("**Preview do Verbete:**")
     
     with stylable_container(
@@ -336,6 +446,7 @@ with tab_preview:
             language="markdown", 
             line_numbers=True
         )
+        
 
 #%% ÁREA DE METADADOS
 
@@ -345,6 +456,7 @@ with tab_metadados:
 #%% SIDEBAR
 
 with st.sidebar:
+    st.write(st.session_state)
     st.write("**Preview do Verbete:**")
     
     with stylable_container(

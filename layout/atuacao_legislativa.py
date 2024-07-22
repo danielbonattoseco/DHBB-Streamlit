@@ -19,45 +19,61 @@ def add_conteiner_atuacao_legislativa(i, atuacao_legislativa):
                                                     help='Nome da comissão em que o verbetado atuou.',
                                                     key=f'atuacaoLegislativa{i}Nome')
         
+        options = ['Comissão Permanente',
+        'Comissão Especial',
+        'Comissão Externa',
+        'Comissão Parlamentar de Inquérito (CPI)']
         atuacao_legislativa['tipo'] = st.selectbox("Tipo", 
-                                                    ['Comissão Permanente',
-                                                    'Comissão Especial',
-                                                    'Comissão Externa',
-                                                    'Comissão Parlamentar de Inquérito (CPI)'],
-                                                    index=None,
+                                                    options,
+                                                    index=options.index(atuacao_legislativa['tipo'])
+                                                    if atuacao_legislativa['tipo']
+                                                    in options
+                                                    else None,
                                                     help='Tipo de comissão em que o verbetado atuou.',
                                                     key=f'atuacaoLegislativa{i}Tipo'
                                                     )
 
-
+        options = ['Presidente',
+         'Membro titular']
         atuacao_legislativa['funcao'] = st.selectbox("Função", 
-                                                        ['Presidente',
-                                                         'Membro titular'],
-                                                        index=None,
+                                                        options,
+                                                        index=options.index(atuacao_legislativa['funcao'])
+                                                        if atuacao_legislativa['funcao']
+                                                        in options
+                                                        else None,
                                                         help='Função exercida pelo verbetado na comissão.',
                                                         key=f'atuacaoLegislativa{i}Funcao'
                                                         )
 
     with col2:
+        options = [x['cargo'] + (
+            f" ({x['mandato']})" 
+            if x['mandato'] 
+            is not None 
+            else '')
+        for x 
+        in st.session_state.trajetorias_politicas
+        if x['cargo'] != ''
+        and x['eleito']]
+        
         atuacao_legislativa['trajetoriaPoliticaRelacionada'] = st.selectbox("Trajetória Política Relacionada", 
-                                                        [x['cargo'] + (
-                                                            f" ({x['mandato']})" 
-                                                            if x['mandato'] 
-                                                            is not None 
-                                                            else '')
-                                                        for x 
-                                                        in st.session_state.trajetorias_politicas
-                                                        if x['cargo'] != ''
-                                                        and x['eleito']],
-                                                        index=None,
-                                                        help='Etapa da trajetória política do verbetado na qual exerceu a atuação legislativa.',
+                                                        options,
+                                                        index=options.index(atuacao_legislativa['trajetoriaPoliticaRelacionada'])
+                                                        if atuacao_legislativa['trajetoriaPoliticaRelacionada']
+                                                        in options
+                                                        else None,
+                                                        help='Etapa da trajetória política do verbetado na qual exerceu a atuação legislativa.  \nA lista apresenta todas as experiências preenchidas na seção "Trajetória Política" onde o verbetado tenha sido identificado como **eleito**.',
                                                         key=f'atuacaoLegislativa{i}TrajetoriaPoliticaRelacionada'
                                                         )
-
+        
+        options = ['Câmara dos Deputados',
+         'Senado Federal']
         atuacao_legislativa['casaLegislativa'] = st.selectbox("Casa Legislativa", 
-                                                        ['Câmara dos Deputados',
-                                                         'Senado Federal'],
-                                                        index=None,
+                                                        options,
+                                                        index=options.index(atuacao_legislativa['casaLegislativa'])
+                                                        if atuacao_legislativa['casaLegislativa']
+                                                        in options
+                                                        else None,
                                                         help='Casa legislativa onde a comissão foi instaurada.',
                                                         key=f'atuacaoLegislativa{i}CasaLegislativa'
                                                         )
