@@ -9,10 +9,10 @@ def add_conteiner_identificacao_pessoal():
     with col1:
         st.text_input("Nome civil", 
                         help="Nome completo no registro civil oficial do verbetado.",
-                        key="nome_civil")
+                        key="nomeCivil")
         st.text_input("Nome social",
                       help="Nome que o político verbetado adotou para adequar a sua identidade referenciando o nome que o representa.",
-                      key="nome_social")
+                      key="nomeSocial")
         
     with col2:
         st.selectbox("Gênero", 
@@ -22,7 +22,7 @@ def add_conteiner_identificacao_pessoal():
                      key="genero")
         st.text_input("Nome político",
                       help="Nome político/fantasia pelo qual o verbetado é conhecido na política.",
-                      key="nome_politico")
+                      key="nomePolitico")
 
         
     with st.container():
@@ -35,29 +35,29 @@ def add_conteiner_identificacao_pessoal():
                             min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
                             help="Data de nascimento do verbetado.",
                             on_change=validate_dates,
-                            key="data_nascimento")                
+                            key="dataNascimento")                
         with col4:
             st.selectbox("UF de nascimento", 
                           list(estados_br().values()),
                           index=None,
                           help="Estado da federação onde o verbetado nasceu.",
-                          key="uf_nascimento")
+                          key="ufNascimento")
         
         with col5:
             st.selectbox("Município de nascimento", 
-                          get_municipios(st.session_state.uf_nascimento),
+                          get_municipios(st.session_state.ufNascimento),
                           index=None,
                           help="Município da federação onde o verbetado nasceu.  \n:gray-background[(selecione a UF de nascimento para habilitar este campo)]",
-                          key="mun_nascimento")
+                          key="munNascimento")
 
     col7,col8 = st.columns(2)
     with col7:
         st.text_input("Nome do pai", 
                         help="Nome civil do pai do verbetado.",
-                        key="nome_pai")
+                        key="nomePai")
         st.text_input("Nome da mãe", 
                         help="Nome civil da mãe do verbetado.",
-                        key="nome_mae")
+                        key="nomeMae")
         
         st.checkbox("Falecido(a)?", 
                         help="Marque esta opção caso o verbetado já tenha falecido.",
@@ -66,10 +66,10 @@ def add_conteiner_identificacao_pessoal():
     with col8:
         st.text_input("Profissão do pai",
                       help="Profissão principal exercida pelo pai do verbetado.",
-                      key="profissao_pai")
+                      key="profissaoPai")
         st.text_input("Profissão da mae",
                       help="Profissão principal exercida pela mãe do verbetado.",
-                      key="profissao_mae")
+                      key="profissaoMae")
 
 
     if st.session_state.falecido:
@@ -83,41 +83,41 @@ def add_conteiner_identificacao_pessoal():
                                 min_value=datetime.datetime.strptime("01-01-1900", '%d-%m-%Y'),
                                 help="Data de falecimento do verbetado.",
                                 on_change=validate_dates,
-                                key="data_falecimento")
+                                key="dataFalecimento")
                 st.checkbox("Causa da morte conhecida?", 
                                 help="Marque esta opção caso a causa da morte do verbetado seja conhecida.",
-                                key="causa_morte_conhecida")
+                                key="causaMorteConhecida")
                 
             with col5:
                 st.selectbox("UF de falecimento", 
                              list(estados_br().values()),
                              index=None,
                              help="Estado da federação onde o verbetado faleceu.",
-                             key="uf_falecimento")
+                             key="ufFalecimento")
             with col6:
                 st.selectbox("Município de falecimento", 
-                             get_municipios(st.session_state.uf_falecimento),
+                             get_municipios(st.session_state.ufFalecimento),
                              index=None,
                              help="Município da federação onde o verbetado faleceu.  \n:gray-background[(selecione a UF de falecimento para habilitar este campo)]",
-                            key="mun_falecimento")
+                            key="munFalecimento")
                 
-        if st.session_state.causa_morte_conhecida:
+        if st.session_state.causaMorteConhecida:
             st.text_input(
                 "Causa da morte",
                 help="Causa da morte conhecida. Exemplo: Causa natural, suicídio...  \n(Esta informação não integra o corpo do verbete, sendo armazenada apenas como um metadado)",
-                key="causa_morte"
+                key="causaMorte"
             )
             
         else:
-            if "causa_morte" in st.session_state:
-                del st.session_state["causa_morte"]
+            if "causaMorte" in st.session_state:
+                del st.session_state["causaMorte"]
             
     else:
-        for j in ['data_falecimento',
-                  'causa_morte_conhecida',
-                  'uf_falecimento',
-                  'mun_falecimento',
-                  'causa_morte']:
+        for j in ['dataFalecimento',
+                  'causaMorteConhecida',
+                  'ufFalecimento',
+                  'munFalecimento',
+                  'causaMorte']:
             if j in st.session_state:
                 del st.session_state[j]
             

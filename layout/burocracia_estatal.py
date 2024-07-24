@@ -3,7 +3,7 @@ import datetime
 from utils.formatar_data import formatar_data
 
 def add_burocracia_estatal():
-    st.session_state.burocracias_estatais.append({
+    st.session_state.burocraciasEstatais.append({
         'cargoNomeado' : '',
         'orgao' : '',
         'dataNomeacao' : {'dia':'',
@@ -79,7 +79,7 @@ def add_conteiner_burocracia_estatal(i, burocracia_estatal):
             
     if st.session_state[f"burocraciaEstatal{i}exonerado"]:
         
-        st.session_state.burocracias_estatais[i].update({'dataExoneracao' : {'dia':'',
+        st.session_state.burocraciasEstatais[i].update({'dataExoneracao' : {'dia':'',
                                                                              'mes':'',
                                                                              'ano':'',
                                                                              'data':''},
@@ -152,5 +152,5 @@ def add_conteiner_burocracia_estatal(i, burocracia_estatal):
 
 # Função para deletar um subconteiner específico
 def delete_burocracia_estatal(i):
-    if 'burocracias_estatais' in st.session_state and 0 <= i < len(st.session_state.burocracias_estatais):
-        st.session_state.burocracias_estatais.pop(i)
+    if 'burocraciasEstatais' in st.session_state and 0 <= i < len(st.session_state.burocraciasEstatais):
+        st.session_state.burocraciasEstatais.pop(i)

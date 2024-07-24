@@ -5,12 +5,12 @@ from utils.partidos_politicos import partidos_politicos
 from utils.legislaturas import legislaturas
 
 def add_trajetoria_politica():
-    st.session_state.trajetorias_politicas.append({
+    st.session_state.trajetoriasPoliticas.append({
         'cargo' : '',
         'partido' : '',
         'votos' : '',
         'eleito' : False,
-        'data_pleito' : {'dia':'',
+        'dataPleito' : {'dia':'',
                          'mes':'',
                          'ano':'',
                          'data':''}
@@ -24,7 +24,7 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
         trajetoria_politica['cargo'] = st.text_input("Cargo", 
                                                     value=trajetoria_politica['cargo'],
                                                     help="Cargo ao qual o político verbetado se candidatou.",
-                                                    key=f'trajetoria_politica_{i}_cargo')
+                                                    key=f'trajetoriaPolitica{i}cargo')
         
         options = partidos_politicos()
         trajetoria_politica['partido'] = st.selectbox("Partido",
@@ -34,12 +34,12 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
                                                       in options
                                                       else None,
                                                       help="Partido pelo qual o político verbetado se candidatou.",
-                                                      key=f'trajetoria_politica_{i}_partido')
+                                                      key=f'trajetoriaPolitica{i}partido')
         
         trajetoria_politica['eleito'] = st.checkbox("Foi eleito para o cargo?", 
                                         value = True if trajetoria_politica['eleito'] else False,
                                         help="Marque esta opção caso o candidato tenha sido eleito para o cargo disputado.",
-                                        key=f"trajetoria_politica_{i}_eleito")
+                                        key=f"trajetoriaPolitica{i}eleito")
 
         
     with col2:
@@ -52,47 +52,47 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
             
             with col1:
                 options = range(1,32)
-                trajetoria_politica['data_pleito']['dia'] = st.selectbox("Dia", 
+                trajetoria_politica['dataPleito']['dia'] = st.selectbox("Dia", 
                             options,
-                            index=options.index(trajetoria_politica['data_pleito']['dia'])
-                                          if trajetoria_politica['data_pleito']['dia'] 
+                            index=options.index(trajetoria_politica['dataPleito']['dia'])
+                                          if trajetoria_politica['dataPleito']['dia'] 
                                           in options
                                           else None,
                             label_visibility="collapsed",
-                            key=f"trajetoria_politica_{i}_dia_pleito")
+                            key=f"trajetoriaPolitica{i}diaPleito")
             with col2:
                 options = range(1,13)
-                trajetoria_politica['data_pleito']['mes'] = st.selectbox("Mes", 
+                trajetoria_politica['dataPleito']['mes'] = st.selectbox("Mes", 
                             options,
-                            index=options.index(trajetoria_politica['data_pleito']['mes'])
-                                          if trajetoria_politica['data_pleito']['mes'] 
+                            index=options.index(trajetoria_politica['dataPleito']['mes'])
+                                          if trajetoria_politica['dataPleito']['mes'] 
                                           in options
                                           else None,
                             label_visibility="collapsed",
-                            key=f"trajetoria_politica_{i}_mes_pleito")
+                            key=f"trajetoriaPolitica{i}mesPleito")
             with col3:
                 options = range(1900, datetime.date.today().year+1)
-                trajetoria_politica['data_pleito']['ano'] = st.selectbox("Ano", 
+                trajetoria_politica['dataPleito']['ano'] = st.selectbox("Ano", 
                                            options,
-                                           index=options.index(trajetoria_politica['data_pleito']['ano'])
-                                           if trajetoria_politica['data_pleito']['ano'] 
+                                           index=options.index(trajetoria_politica['dataPleito']['ano'])
+                                           if trajetoria_politica['dataPleito']['ano'] 
                                            in options
                                            else None,
                         label_visibility="collapsed",
-                        key=f"trajetoria_politica_{i}_ano_pleito")
+                        key=f"trajetoriaPolitica{i}anoPleito")
                 
-            trajetoria_politica['data_pleito']['data'] = formatar_data(trajetoria_politica['data_pleito']['ano'],
-                                                                       trajetoria_politica['data_pleito']['mes'],
-                                                                       trajetoria_politica['data_pleito']['dia'])
+            trajetoria_politica['dataPleito']['data'] = formatar_data(trajetoria_politica['dataPleito']['ano'],
+                                                                       trajetoria_politica['dataPleito']['mes'],
+                                                                       trajetoria_politica['dataPleito']['dia'])
             
         trajetoria_politica['votos'] = st.number_input("Votos",
                                                        min_value=0,
                                                        value=trajetoria_politica['votos'] if trajetoria_politica['votos'] else None,
                                                        format="%d",
                                                        help="Quantidade de votos que o verbetado recebeu na candidatura.",
-                                                       key=f"trajetoria_politica_{i}_votos")
+                                                       key=f"trajetoriaPolitica{i}votos")
         
-    if st.session_state[f"trajetoria_politica_{i}_eleito"]:
+    if st.session_state[f"trajetoriaPolitica{i}eleito"]:
         
         st.session_state.trajetorias_politicas[i].update({'mandato' : '',
         'renuncia' : False
@@ -106,17 +106,17 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
                                                     in options
                                                     else None,
                                                     help='Legislatura ou período em para o qual o político verbetado foi empossado.',
-                                                    key=f'trajetoria_politica_{i}_legislatura')
+                                                    key=f'trajetoriaPolitica{i}legislatura')
                         
         trajetoria_politica['renuncia'] = st.checkbox("Renunciou ao cargo?", 
                                                       value = True if trajetoria_politica['renuncia'] else False,
                                         help='Marque esta opçào caso o candidato tenha renunciado ao cargo durante o exercício do mandato.',
-                                        key=f"trajetoria_politica_{i}_renuncia")
+                                        key=f"trajetoriaPolitica{i}renuncia")
         
-        if st.session_state[f"trajetoria_politica_{i}_renuncia"]:
+        if st.session_state[f"trajetoriaPolitica{i}renuncia"]:
             
-            st.session_state.trajetorias_politicas[i].update({'renuncia_motivo' : '',
-            'renuncia_data' : {'dia':'',
+            st.session_state.trajetorias_politicas[i].update({'renunciaMotivo' : '',
+            'renunciaData' : {'dia':'',
                                'mes':'',
                                'ano':'',
                                'data':''}
@@ -124,10 +124,10 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
             
             col1,col2 = st.columns(2)
             with col1:
-                trajetoria_politica['renuncia_motivo'] = st.text_input("Motivo da renúncia", 
+                trajetoria_politica['renunciaMotivo'] = st.text_input("Motivo da renúncia", 
                                                             value=trajetoria_politica['renuncia_motivo'],
                                                             help='Motivo noticiado/alegado pelo verbetado para a renúncia ao cargo.',
-                                                            key=f'trajetoria_politica_{i}_renuncia_motivo')
+                                                            key=f'trajetoriaPolitica{i}renunciaMotivo')
                 
             with col2:
                 st.markdown("""<div class="seletor_data">Data da renúncia</div>""",
@@ -138,61 +138,61 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
                     col3,col4,col5 = st.columns([0.7,0.7,1])
                     with col3:
                         options = range(1,32)
-                        trajetoria_politica['renuncia_data']['dia'] = st.selectbox("Dia", 
+                        trajetoria_politica['renunciaData']['dia'] = st.selectbox("Dia", 
                                     options,
-                                    index=trajetoria_politica['renuncia_data']['dia']
-                                    if trajetoria_politica['renuncia_data']['dia']
+                                    index=trajetoria_politica['renunciaData']['dia']
+                                    if trajetoria_politica['renunciaData']['dia']
                                     in options
                                     else None,
                                     label_visibility="collapsed",
-                                    key=f"trajetoria_politica_{i}_dia_renuncia")
+                                    key=f"trajetoriaPolitica{i}diaRenuncia")
                     with col4:
                         options = range(1,13)
-                        trajetoria_politica['renuncia_data']['mes'] = st.selectbox("Mes", 
+                        trajetoria_politica['renunciaData']['mes'] = st.selectbox("Mes", 
                                     options,
-                                    index=trajetoria_politica['renuncia_data']['mes']
-                                    if trajetoria_politica['renuncia_data']['mes']
+                                    index=trajetoria_politica['renunciaData']['mes']
+                                    if trajetoria_politica['renunciaData']['mes']
                                     in options
                                     else None,
                                     label_visibility="collapsed",
-                                    key=f"trajetoria_politica_{i}_mes_renuncia")
+                                    key=f"trajetoriaPolitica{i}mesRenuncia")
                     with col5:
                         options = range(1900, datetime.date.today().year+1)
-                        trajetoria_politica['renuncia_data']['ano'] = st.selectbox("Ano", 
+                        trajetoria_politica['renunciaData']['ano'] = st.selectbox("Ano", 
                                 options,
-                                index=trajetoria_politica['renuncia_data']['ano']
-                                if trajetoria_politica['renuncia_data']['ano']
+                                index=trajetoria_politica['renunciaData']['ano']
+                                if trajetoria_politica['renunciaData']['ano']
                                 in options
                                 else None,
                                 label_visibility="collapsed",
-                                key=f"trajetoria_politica_{i}_ano_renuncia")
+                                key=f"trajetoriaPolitica{i}anoRenuncia")
                         
-                    trajetoria_politica['renuncia_data']['data'] = formatar_data(trajetoria_politica['renuncia_data']['ano'],
-                                                                                 trajetoria_politica['renuncia_data']['mes'],
-                                                                                 trajetoria_politica['renuncia_data']['dia'])
+                    trajetoria_politica['renunciaData']['data'] = formatar_data(trajetoria_politica['renunciaData']['ano'],
+                                                                                 trajetoria_politica['renunciaData']['mes'],
+                                                                                 trajetoria_politica['renunciaData']['dia'])
                     
         else:
-            for j in ['renuncia_motivo',
-                      'renuncia_data',
-                      'dia_renuncia',
-                      'mes_renuncia',
-                      'ano_renuncia']:
+            for j in ['renunciaMotivo',
+                      'renunciaData',
+                      'diaRenuncia',
+                      'mesRenuncia',
+                      'anoRenuncia']:
                 if j in trajetoria_politica:
-                    if f"trajetoria_politica_{i}_{j}" in st.session_state:
-                        del st.session_state[f"trajetoria_politica_{i}_{j}"]
+                    if f"trajetoriaPolitica{i}{j}" in st.session_state:
+                        del st.session_state[f"trajetoriaPolitica{i}{j}"]
                     del trajetoria_politica[j]
             
     else:
         for j in ['mandato',
                   'renuncia',
-                  'renuncia_motivo',
-                  'renuncia_data',
-                  'dia_renuncia',
-                  'mes_renuncia',
-                  'ano_renuncia']:
+                  'renunciaMotivo',
+                  'renunciaData',
+                  'diaRenuncia',
+                  'mesRenuncia',
+                  'anoRenuncia']:
             if j in trajetoria_politica:
-                if f"trajetoria_politica_{i}_{j}" in st.session_state:
-                    del st.session_state[f"trajetoria_politica_{i}_{j}"]
+                if f"trajetoriaPolitica{i}{j}" in st.session_state:
+                    del st.session_state[f"trajetoriaPolitica{i}{j}"]
                 del trajetoria_politica[j]
 
     st.button(":red[Deletar Trajetória Política]", 
@@ -202,6 +202,6 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
 
 # Função para deletar um subconteiner específico
 def delete_trajetoria_politica(i):
-    if 'trajetorias_politicas' in st.session_state and 0 <= i < len(st.session_state.trajetorias_politicas):
-        st.session_state.trajetorias_politicas.pop(i)
+    if 'trajetoriasPoliticas' in st.session_state and 0 <= i < len(st.session_state.trajetoriasPoliticas):
+        st.session_state.trajetoriasPoliticas.pop(i)
 

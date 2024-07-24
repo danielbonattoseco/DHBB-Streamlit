@@ -1,7 +1,7 @@
 import streamlit as st
 
 def add_atuacao_legislativa():
-    st.session_state.atuacoes_legislativas.append({
+    st.session_state.atuacoesLegislativas.append({
         'nome' : '',
         'trajetoriaPoliticaRelacionada' : '',
         'tipo' : '',
@@ -52,7 +52,7 @@ def add_conteiner_atuacao_legislativa(i, atuacao_legislativa):
             is not None 
             else '')
         for x 
-        in st.session_state.trajetorias_politicas
+        in st.session_state.trajetoriasPoliticas
         if x['cargo'] != ''
         and x['eleito']]
         
@@ -86,5 +86,5 @@ def add_conteiner_atuacao_legislativa(i, atuacao_legislativa):
 
 # Função para deletar um subconteiner específico
 def delete_atuacao_legislativa(i):
-    if 'atuacoes_legislativas' in st.session_state and 0 <= i < len(st.session_state.atuacoes_legislativas):
-        st.session_state.atuacoes_legislativas.pop(i)
+    if 'atuacoesLegislativas' in st.session_state and 0 <= i < len(st.session_state.atuacoesLegislativas):
+        st.session_state.atuacoesLegislativas.pop(i)

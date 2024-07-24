@@ -3,7 +3,7 @@ import datetime
 from utils.formatar_data import formatar_data
 
 def add_processo_criminal():
-    st.session_state.processos_criminais.append({
+    st.session_state.processosCriminais.append({
         'processo' : '',
         'codigoProcesso' : '',
         'motivoProcesso': '',
@@ -41,7 +41,7 @@ def add_conteiner_processo_criminal(i, processo_criminal):
 
     if processo_criminal['condenado']:
         
-        st.session_state.processos_criminais[i].update({'dataCondenacao' : {'dia':'',
+        st.session_state.processosCriminais[i].update({'dataCondenacao' : {'dia':'',
                            'mes':'',
                            'ano':'',
                            'data':''}
@@ -103,7 +103,6 @@ def add_conteiner_processo_criminal(i, processo_criminal):
             if f"processoCriminal{i}{j}" in st.session_state:
                 del st.session_state[f"processoCriminal{i}{j}"]
 
-
     st.button(":red[Deletar Processo Criminal]", 
               on_click=delete_processo_criminal,
               args=(i,),
@@ -111,5 +110,5 @@ def add_conteiner_processo_criminal(i, processo_criminal):
 
 # Função para deletar um subconteiner específico
 def delete_processo_criminal(i):
-    if 'processos_criminais' in st.session_state and 0 <= i < len(st.session_state.processos_criminais):
-        st.session_state.processos_criminais.pop(i)
+    if 'processosCriminais' in st.session_state and 0 <= i < len(st.session_state.processosCriminais):
+        st.session_state.processosCriminais.pop(i)

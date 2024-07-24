@@ -3,7 +3,7 @@ import datetime
 from utils.formatar_data import formatar_data
 
 def add_obra_do_verbetado():
-    st.session_state.obras_do_verbetado.append({
+    st.session_state.obrasDoVerbetado.append({
         'nomeObra' : '',
         'dataPublicacao' : {'dia':'',
                             'mes':'',
@@ -76,5 +76,5 @@ def add_conteiner_obra_do_verbetado(i, obra_do_verbetado):
 
 # Função para deletar um subconteiner específico
 def delete_obra_do_verbetado(i):
-    if 'obras_do_verbetado' in st.session_state and 0 <= i < len(st.session_state.obras_do_verbetado):
-        st.session_state.obras_do_verbetado.pop(i)
+    if 'obrasDoVerbetado' in st.session_state and 0 <= i < len(st.session_state.obrasDoVerbetado):
+        st.session_state.obrasDoVerbetado.pop(i)

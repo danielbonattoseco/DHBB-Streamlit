@@ -3,7 +3,7 @@ import datetime
 from utils.formatar_data import formatar_data
 
 def add_atuacao_imprensa():
-    st.session_state.atuacoes_imprensa.append({
+    st.session_state.atuacoesImprensa.append({
         'nomeJornal' : '',
         'funcaoExercida' : '',
         'dataInicio' : {'dia':'',
@@ -129,5 +129,5 @@ def add_conteiner_atuacao_imprensa(i, atuacao_imprensa):
 
 # Função para deletar um subconteiner específico
 def delete_atuacao_imprensa(i):
-    if 'atuacoes_imprensa' in st.session_state and 0 <= i < len(st.session_state.atuacoes_imprensa):
-        st.session_state.atuacoes_imprensa.pop(i)
+    if 'atuacoesImprensa' in st.session_state and 0 <= i < len(st.session_state.atuacoesImprensa):
+        st.session_state.atuacoesImprensa.pop(i)

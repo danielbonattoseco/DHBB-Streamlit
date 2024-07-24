@@ -4,14 +4,14 @@ from utils.estados_br import estados_br
 from utils.get_municipios import get_municipios
 
 def add_formacao_academica():
-    st.session_state.formacoes_academicas.append({
+    st.session_state.formacoesAcademicas.append({
         'tipo' : '',
         'curso' : '',
         'instituicao' : '',
         'uf' : '',
         'municipio' : '',
-        'ano_inicio' : '',
-        'ano_fim' : ''
+        'anoInicio' : '',
+        'anoFim' : ''
     })
 
 def add_conteiner_formacao_academica(i, formacao_academica):
@@ -27,7 +27,7 @@ def add_conteiner_formacao_academica(i, formacao_academica):
                                                     in options
                                                     else None,
                                                     help="Tipo de formação realizada pelo verbetado.",
-                                                    key=f'formacao_academica_{i}_tipo'
+                                                    key=f'formacaoAcademica{i}tipo'
                                                     )
 
         options = list(estados_br().values())        
@@ -38,23 +38,23 @@ def add_conteiner_formacao_academica(i, formacao_academica):
                                   in options
                                   else None,
                                   help="Estado da instituição de ensino onde o verbetado concluiu a formação.",
-                                  key=f"formacao_academica_{i}_uf")
+                                  key=f"formacaoAcademica{i}uf")
 
         options = range(1900, datetime.date.today().year+1)             
-        formacao_academica['ano_inicio'] = st.selectbox("Ano Início", 
+        formacao_academica['anoInicio'] = st.selectbox("Ano Início", 
                                         options, 
-                                        index=options.index(formacao_academica['ano_inicio'])
-                                        if formacao_academica['ano_inicio'] 
+                                        index=options.index(formacao_academica['anoInicio'])
+                                        if formacao_academica['anoInicio'] 
                                         in options
                                         else None,
                                         help="Ano de inicio da formação.",
-                                        key=f"formacao_academica_{i}_ano_inicio")      
+                                        key=f"formacaoAcademica{i}anoInicio")      
 
     with col2:
         formacao_academica['curso'] = st.text_input("Curso", 
                                                     value=formacao_academica['curso'],
                                                     help="Nome do curso realizado pelo verbetado.  \nExemplo: Administração de Empresas, Ciência Política, etc.",
-                                                    key=f'formacao_academica_{i}_curso')
+                                                    key=f'formacaoAcademica{i}Curso')
         
         options = get_municipios(formacao_academica['uf'])
         formacao_academica['municipio'] = st.selectbox("Município", 
@@ -64,31 +64,30 @@ def add_conteiner_formacao_academica(i, formacao_academica):
                                           in options
                                           else None,
                                           help="Município da instituição de ensino onde o verbetado concluiu a formação.",
-                                          key=f"formacao_academica_{i}_municipio")
+                                          key=f"formacaoAcademica{i}Municipio")
 
         options = range(1900, datetime.date.today().year)
-        formacao_academica['ano_fim'] = st.selectbox("Ano Fim", 
+        formacao_academica['anoFim'] = st.selectbox("Ano Fim", 
                                         options, 
-                                        index=options.index(formacao_academica['ano_fim'])
-                                        if formacao_academica['ano_fim'] 
+                                        index=options.index(formacao_academica['anoFim'])
+                                        if formacao_academica['anoFim'] 
                                         in options
                                         else None,                                        
                                         help="Ano de conclusão da formação.",
-                                        key=f"formacao_academica_{i}_ano_fim")      
+                                        key=f"formacaoAcademica{i}anoFim")      
         
     with col3:
         formacao_academica['instituicao'] = st.text_input("Instituição", 
                                                     value=formacao_academica['instituicao'],
                                                     help="Nome da instituição de ensino onde o verbetado concluiu a formação.  \nExemplo: Fundação Getúlio Vargas, Universidade Federal do Rio de Janeiro, etc.",
-                                                    key=f'formacao_academica_{i}_instituicao')
+                                                    key=f'formacaoAcademica{i}instituicao')
 
     st.button(":red[Deletar Formação Acadêmica]", 
               on_click=delete_formacao_academica,
               args=(i,),
-              key=f"delete_formacao_academica_{i}")
+              key=f"deleteFormacaoAcademica{i}")
 
 # Função para deletar um subconteiner específico
 def delete_formacao_academica(i):
-    if 'formacoes_academicas' in st.session_state and 0 <= i < len(st.session_state.formacoes_academicas):
-        st.toast(st.session_state.formacoes_academicas[i])
-        st.session_state.formacoes_academicas.pop(i)
+    if 'formacoesAcademicas' in st.session_state and 0 <= i < len(st.session_state.formacoesAcademicas):
+        st.session_state.formacoesAcademicas.pop(i)
