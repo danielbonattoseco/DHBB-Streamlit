@@ -368,7 +368,6 @@ with tab_metadados:
     key="metadataDownloadButton",
 )
 
-    st.write(st.session_state)
 
 #%% SIDEBAR
 
