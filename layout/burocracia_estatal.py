@@ -79,11 +79,11 @@ def add_conteiner_burocracia_estatal(i, burocracia_estatal):
             
     if st.session_state[f"burocraciaEstatal{i}exonerado"]:
         
-        st.session_state.burocraciasEstatais[i].update({'dataExoneracao' : {'dia':'',
+        st.session_state.burocraciasEstatais[i].update({'exoneracaoData' : {'dia':'',
                                                                              'mes':'',
                                                                              'ano':'',
                                                                              'data':''},
-                                                         'motivoExoneracao' : ''
+                                                         'exoneracaoMotivo' : ''
         })
         
         col1, col2 = st.columns(2)
@@ -98,48 +98,48 @@ def add_conteiner_burocracia_estatal(i, burocracia_estatal):
                 col3,col4,col5 = st.columns([0.7,0.7,1])
                 with col3:
                     options = range(1,32)
-                    burocracia_estatal['dataExoneracao']['dia'] = st.selectbox("Dia", 
+                    burocracia_estatal['exoneracaoData']['dia'] = st.selectbox("Dia", 
                                 options,
-                                index=options.index(burocracia_estatal['dataExoneracao']['dia'])
-                                if burocracia_estatal['dataExoneracao']['dia']
+                                index=options.index(burocracia_estatal['exoneracaoData']['dia'])
+                                if burocracia_estatal['exoneracaoData']['dia']
                                 in options
                                 else None,
                                 label_visibility="collapsed",
                                 key=f"burocraciaEstatal{i}diaExoneracao")
                 with col4:
                     options = range(1,13)
-                    burocracia_estatal['dataExoneracao']['mes'] = st.selectbox("Mes", 
+                    burocracia_estatal['exoneracaoData']['mes'] = st.selectbox("Mes", 
                                 options,
-                                index=options.index(burocracia_estatal['dataExoneracao']['mes'])
-                                if burocracia_estatal['dataExoneracao']['mes']
+                                index=options.index(burocracia_estatal['exoneracaoData']['mes'])
+                                if burocracia_estatal['exoneracaoData']['mes']
                                 in options
                                 else None,
                                 label_visibility="collapsed",
                                 key=f"burocraciaEstatal{i}mesExoneracao")
                 with col5:
                     options = range(1900, datetime.date.today().year+1)
-                    burocracia_estatal['dataExoneracao']['ano'] = st.selectbox("Ano", 
+                    burocracia_estatal['exoneracaoData']['ano'] = st.selectbox("Ano", 
                             options,
-                            index=options.index(burocracia_estatal['dataExoneracao']['ano'])
-                            if burocracia_estatal['dataExoneracao']['ano']
+                            index=options.index(burocracia_estatal['exoneracaoData']['ano'])
+                            if burocracia_estatal['exoneracaoData']['ano']
                             in options
                             else None,
                             label_visibility="collapsed",
                             key=f"burocraciaEstatal{i}anoExoneracao")
                     
-                burocracia_estatal['dataExoneracao']['data']  = formatar_data(burocracia_estatal['dataExoneracao']['ano'],
-                                                                              burocracia_estatal['dataExoneracao']['mes'],
-                                                                              burocracia_estatal['dataExoneracao']['dia'])
+                burocracia_estatal['exoneracaoData']['data']  = formatar_data(burocracia_estatal['exoneracaoData']['ano'],
+                                                                              burocracia_estatal['exoneracaoData']['mes'],
+                                                                              burocracia_estatal['exoneracaoData']['dia'])
                 
         with col2:
-            burocracia_estatal['motivoExoneracao'] = st.text_input("Motivo da exoneração", 
-                                                        value=burocracia_estatal['motivoExoneracao'],
+            burocracia_estatal['exoneracaoMotivo'] = st.text_input("Motivo da exoneração", 
+                                                        value=burocracia_estatal['exoneracaoMotivo'],
                                                         help='Motivo conhecido da exoneração do verbetado do cargo.',
-                                                        key=f'burocraciaEstatal{i}motivoExoneracao')
+                                                        key=f'burocraciaEstatal{i}exoneracaoMotivo')
             
     else:
-        for j in ['dataExoneracao',
-                  'motivoExoneracao']:
+        for j in ['exoneracaoData',
+                  'exoneracaoMotivo']:
             if j in burocracia_estatal:
                 if f"burocraciaEstatal{i}{j}" in st.session_state:
                     del st.session_state[f"burocraciaEstatal{i}{j}"]

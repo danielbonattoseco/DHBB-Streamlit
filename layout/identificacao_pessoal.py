@@ -10,6 +10,7 @@ def add_conteiner_identificacao_pessoal():
         st.text_input("Nome civil", 
                         help="Nome completo no registro civil oficial do verbetado.",
                         key="nomeCivil")
+        
         st.text_input("Nome social",
                       help="Nome que o político verbetado adotou para adequar a sua identidade referenciando o nome que o representa.",
                       key="nomeSocial")
@@ -20,6 +21,7 @@ def add_conteiner_identificacao_pessoal():
                      index=None,
                      help='Gênero do verbetado',
                      key="genero")
+        
         st.text_input("Nome político",
                       help="Nome político/fantasia pelo qual o verbetado é conhecido na política.",
                       key="nomePolitico")

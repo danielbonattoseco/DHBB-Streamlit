@@ -31,7 +31,7 @@ def add_conteiner_formacao_academica(i, formacao_academica):
                                                     )
 
         options = list(estados_br().values())        
-        formacao_academica['uf'] = st.selectbox("UF de nascimento", 
+        formacao_academica['uf'] = st.selectbox("UF de formação", 
                                   options,
                                   index=options.index(formacao_academica['uf'])
                                   if formacao_academica['uf'] 

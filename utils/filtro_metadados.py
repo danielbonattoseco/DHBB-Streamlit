@@ -17,6 +17,6 @@ def filtro_metadados(session_state):
     
     reordered_data = reorder_keys(json_data, key_order)
     
-    new_json_data = json.dumps(reordered_data, indent=4)
+    new_json_data = json.dumps(reordered_data, ensure_ascii=False, indent=4)
     
     return new_json_data

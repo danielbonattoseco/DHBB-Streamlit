@@ -121,7 +121,6 @@ with tab_preenchimento:
     with st.expander("**Formação Acadêmica**"):
         # Inicializando a lista de subconteiners na primeira execução
         if 'formacoesAcademicas' not in st.session_state:
-            st.toast('1')
             st.session_state.formacoesAcademicas = []
 
         # Conteiner principal
@@ -145,16 +144,13 @@ with tab_preenchimento:
     with st.expander("**Trajetória Política**"):
         if 'trajetoriasPoliticas' not in st.session_state:
             st.session_state.trajetoriasPoliticas = []
-            st.toast('1')
-        else:
-            st.toast('2')
 
         # Conteiner principal
         with st.container():
             
             if len(st.session_state.trajetoriasPoliticas) < 1:
                 layout.trajetoria_politica.add_trajetoria_politica()
-            
+                
             # Exibindo todos os subconteiners
             for i, trajetoria_politica in enumerate(st.session_state.trajetoriasPoliticas):
                 with st.container(border=1):
@@ -164,7 +160,6 @@ with tab_preenchimento:
             st.button(":green[**+ Adicionar**]",
                       on_click=layout.trajetoria_politica.add_trajetoria_politica,
                       key=f"insertTrajetoriaPolitica{i}")
-
     
 #%% Atuação Legislativa
     with st.expander("**Atuação Legislativa**"):
@@ -367,7 +362,7 @@ with tab_metadados:
     
     st.download_button(
     label="Download JSON",
-    file_name="verbete_%s.json"%(st.session_state['nomeCivil'].replace(" ", "")),
+    file_name="verbete_%s.json"%(st.session_state['nomeCivil'].replace(" ", "_")),
     mime="application/json",
     data=json_string,
     key="metadataDownloadButton",
@@ -378,7 +373,6 @@ with tab_metadados:
 #%% SIDEBAR
 
 with st.sidebar:
-    st.write(st.session_state)
     st.write("**Preview do Verbete:**")
     
     with stylable_container(
@@ -394,6 +388,7 @@ with st.sidebar:
             line_numbers=True
         )
 
+    st.write(st.session_state)
 
     # st.header("Menu")
     # st.markdown("🖊 [Parte 1 - Informações Pessoais](#parte1)")

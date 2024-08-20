@@ -94,7 +94,7 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
         
     if st.session_state[f"trajetoriaPolitica{i}eleito"]:
         
-        st.session_state.trajetorias_politicas[i].update({'mandato' : '',
+        st.session_state.trajetoriasPoliticas[i].update({'mandato' : '',
         'renuncia' : False
         })
         
@@ -115,7 +115,7 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
         
         if st.session_state[f"trajetoriaPolitica{i}renuncia"]:
             
-            st.session_state.trajetorias_politicas[i].update({'renunciaMotivo' : '',
+            st.session_state.trajetoriasPoliticas[i].update({'renunciaMotivo' : '',
             'renunciaData' : {'dia':'',
                                'mes':'',
                                'ano':'',
@@ -125,7 +125,7 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
             col1,col2 = st.columns(2)
             with col1:
                 trajetoria_politica['renunciaMotivo'] = st.text_input("Motivo da renúncia", 
-                                                            value=trajetoria_politica['renuncia_motivo'],
+                                                            value=trajetoria_politica['renunciaMotivo'],
                                                             help='Motivo noticiado/alegado pelo verbetado para a renúncia ao cargo.',
                                                             key=f'trajetoriaPolitica{i}renunciaMotivo')
                 
@@ -204,4 +204,5 @@ def add_conteiner_trajetoria_politica(i, trajetoria_politica):
 def delete_trajetoria_politica(i):
     if 'trajetoriasPoliticas' in st.session_state and 0 <= i < len(st.session_state.trajetoriasPoliticas):
         st.session_state.trajetoriasPoliticas.pop(i)
+    
 
