@@ -368,6 +368,7 @@ with tab_metadados:
     key="metadataDownloadButton",
 )
 
+    st.write(st.session_state)
 
 #%% SIDEBAR
 
@@ -386,8 +387,6 @@ with st.sidebar:
             language="markdown", 
             line_numbers=True
         )
-
-    st.write(st.session_state)
 
     # st.header("Menu")
     # st.markdown("🖊 [Parte 1 - Informações Pessoais](#parte1)")
